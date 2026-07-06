@@ -201,15 +201,33 @@ function buildPlan(g, ovr) {
     if (sid === null || sid === undefined) return;
     const sp = SPELLS[sid];
     const price = spellPrice(ovr, sid);
+    const eff = sp.eff || { type: "manual" };
+    if (goldLeft < price) { notes.push(`Phép "${sp.n}" cần ${price} vàng — đang thiếu ${price - goldLeft}.`); return; }
+    // Phép cộng vàng: nếu lời hoặc hòa vốn thì mua-dùng ngay
+    if (eff.type === "gold") {
+      const net = eff.n - price;
+      if (net >= 0) { actions.push({ pri: 92, txt: `Mua rồi dùng ngay phép "${sp.n}" (${price} vàng → nhận ${eff.n} vàng): lời ${net} vàng, không có lý do gì bỏ qua.` }); return; }
+    }
     let v = 0; const why = [];
-    if (/\+\d+\/\+?\d*/.test(sp.d)) { v += 3; if (strongest) why.push(`buff chỉ số — nên dồn vào "${UNITS[strongest.id].n}"`); }
+    // Phép buff chỉ số: tính giá trị cụ thể trên mỗi vàng
+    if (eff.type === "buff") {
+      const nTgt = eff.tg === "all" ? Math.max(1, boardCells.length) : 1;
+      const stat = (eff.a + eff.h) * nTgt;
+      const perGold = price > 0 ? stat / price : stat;
+      v += Math.min(12, Math.round(perGold * 1.5));
+      if (eff.tg === "all") why.push(`+${eff.a}/+${eff.h} cho cả ${boardCells.length} quân = ${stat} tổng chỉ số với ${price} vàng`);
+      else why.push(`+${eff.a}/+${eff.h}${strongest ? ` — nên dồn vào "${UNITS[strongest.id].n}"` : ""} (${stat} chỉ số / ${price} vàng)`);
+    }
+    if (eff.type === "double" && strongest) { v += 8; why.push(`gấp đôi ATK — dùng lên "${UNITS[strongest.id].n}" (${effStats(ovr, strongest)[0]} ATK)`); }
+    // Cộng hưởng với đội hình hiện tại
     if (sp.d.includes("TIÊN ĐAN") && boardTags.has("TIENDAN")) { v += 6; why.push("đội đang chạy hệ Tiên Đan"); }
     if (sp.d.includes("LÁ CHẮN") && boardTags.has("LACHAN")) { v += 5; why.push("kích được các thẻ ăn Lá Chắn"); }
     if ((sp.d.includes("TRIỆU TẬP") || sp.d.includes("TRIỆU HỒI") || sp.d.includes("riệu hồi")) && boardTags.has("TRIEUHOI")) { v += 5; why.push("kích chuỗi Triệu hồi"); }
-    if (sp.d.includes("Vàng")) { v += 3; why.push("kinh tế vàng"); }
     if (sp.d.includes("TÁI SINH") && boardTags.has("TAISINH")) { v += 5; why.push("khớp hệ Tái Sinh"); }
+    if (eff.type === "manual" && sp.d.includes("Vàng")) { v += 3; why.push("kinh tế vàng"); }
     Object.keys(TRIBE_META).forEach((t) => { if (sp.d.includes(t) && boardCells.some((c) => UNITS[c.id].t === t)) { v += 4; why.push(`nhắm đúng tộc ${TRIBE_META[t].l} đang chơi`); } });
-    if (v >= 5 && goldLeft >= price) actions.push({ pri: 50 + v, txt: `Mua phép "${sp.n}" (${price} vàng): ${why.join("; ")}.` });
+    if (price === 0 && sp.p === 0 && ovr.prices[sid] === undefined) why.push("⚠ phép chưa có giá (đang tính 0v) — cập nhật giá ở tab Danh sách");
+    if (v >= 4) actions.push({ pri: 50 + v, txt: `Mua phép "${sp.n}" (${price} vàng): ${why.join("; ")}.` });
   });
 
   // --- 4b. Phép / Tiên Đan đang có trong Túi ---
