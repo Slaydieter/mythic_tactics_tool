@@ -86,6 +86,119 @@ const TIER_BASE = (() => {
   return b;
 })();
 
+/* ============ ENGINE COMBO (Nguồn → Hưởng lợi) ============ */
+/* Mỗi cơ chế có PRODUCER (p, tạo sự kiện) và PAYOFF (y, hưởng lợi).
+   Combo chỉ mạnh khi trên sân có CẢ nguồn LẪN quân ăn theo. Nhận diện tự động
+   bằng từ khóa trong skill (dùng chung cho mọi tộc), có ROLE_OVERRIDE để chỉnh tay. */
+const unitText = (u) => (u.k || []).join(" ").toLowerCase();
+const MECH_DEFS = {
+  TRIEUHOI: {
+    label: "Triệu hồi",
+    p: (t) => /triệu hồi\s+(\d|một|bản sao)/.test(t) && !/(được triệu hồi|khi nào triệu hồi|sau khi triệu hồi)/.test(t),
+    y: (t) => /(khi nào triệu hồi|được triệu hồi|sau khi triệu hồi)/.test(t) && /(nhận|cho nó|cho đồng minh|cho tất cả|\+\d)/.test(t),
+  },
+  TAISINH: {
+    label: "Tái Sinh",
+    p: (t) => /(thấp máu nhất.{0,10}tái sinh|khác.{0,10}tái sinh|cho .{0,25}tái sinh)/.test(t) && !/sau khi .{0,25}tái sinh/.test(t),
+    y: (t) => /(sau khi.{0,25}tái sinh|tái sinh".{0,60}(nhận|được \+|cho nó|cho tất cả)|được "?tái sinh"? nhận|tái sinh.{0,40}\+\d)/.test(t),
+  },
+  CHET: {
+    label: "Chết (nuôi engine)",
+    p: (t, u) => !!u.sum || /tử vong/.test(t),
+    y: (t) => /((đồng minh|niles).{0,20}chết|sau khi.{0,20}chết).{0,25}(nhận|\+\d|"tái sinh")/.test(t),
+  },
+};
+const MECH_LIST = Object.keys(MECH_DEFS);
+const MECH_TAGS = new Set(["TRIEUHOI", "TAISINH"]); // tag đã có engine combo riêng → khỏi cộng phẳng
+
+// Chỉnh tay vai trò (đã verify cho toàn bộ tộc NILES). "p"=nguồn, "y"=payoff, "py"=cả hai, "-"=xóa.
+const ROLE_OVERRIDE = {
+  // NILES – engine Triệu hồi
+  SEKHMET: { TRIEUHOI: "p" },
+  "SA TINH": { TRIEUHOI: "p" },
+  TAWARET: { TRIEUHOI: "p" },
+  UPAMAKI: { TRIEUHOI: "p" },
+  "CHIẾN BINH NILES": { TRIEUHOI: "p" },
+  "MIÊU CUNG THỦ": { TRIEUHOI: "p" }, // kích TỬ VONG cùng cột → nổ chuỗi triệu hồi
+  SOBEK: { TRIEUHOI: "y" },
+  BASTET: { TRIEUHOI: "y" },
+  SEPOPARD: { TRIEUHOI: "y" },
+  "ĐẠI TƯỚNG NILES": { TRIEUHOI: "y" },
+  // NILES – engine Tái Sinh
+  ANUBIS: { TAISINH: "p", CHET: "y" },
+  NEFERTEM: { TAISINH: "p" },
+  OSIRIS: { TAISINH: "y" },
+  ISIS: { TAISINH: "y" },
+  THOTH: { TAISINH: "y", CHET: "-" }, // "TỬ VONG" trong skill chỉ là điều kiện, THOTH không phải quân chết
+  GRIFFIN: { TAISINH: "py" },
+  BABI: { TAISINH: "py" },
+  // NILES – nuôi từ cái chết
+  AMMIT: { CHET: "y" },
+};
+
+const UNIT_ROLES = (() => {
+  const out = {};
+  UNITS.forEach((u) => {
+    const t = unitText(u);
+    const roles = {};
+    MECH_LIST.forEach((m) => {
+      const d = MECH_DEFS[m];
+      let r = "";
+      if (d.p(t, u)) r += "p";
+      if (d.y(t, u)) r += "y";
+      if (r) roles[m] = r;
+    });
+    const ov = ROLE_OVERRIDE[u.n];
+    if (ov) Object.entries(ov).forEach(([m, r]) => { if (r === "-") delete roles[m]; else roles[m] = r; });
+    out[u.id] = roles;
+  });
+  return out;
+})();
+const roleOf = (id) => UNIT_ROLES[id] || {};
+
+// Sức mạnh 1 quân "hưởng lợi": ưu tiên độ lớn fx đã phân tích, nếu rỗng thì lấy theo cấp.
+function payoffWeight(u, cell) {
+  const fx = (u.fx && u.fx[cell.lv]) || [];
+  const fxmag = fx.reduce((s, f) => s + (f.a + f.h) * Math.min(f.lim || 3, 3), 0);
+  const base = fxmag > 0 ? fxmag * 0.5 : u.c * 1.5;
+  return base * (1 + cell.lv * 0.35);
+}
+// "Lượng cung" sự kiện của 1 quân nguồn (số thân xác / lần kích ước lượng).
+function supplyWeight(u, cell) {
+  const m = unitText(u).match(/triệu hồi\s+(\d)/);
+  let n = u.sum ? 1 : m ? +m[1] : 1;
+  return Math.min(3, n) * (1 + cell.lv * 0.25);
+}
+// Điểm combo cho toàn sân, trả về các dòng {pts,label} để cộng vào scoreBoard.
+function comboScore(bus) {
+  const items = [];
+  MECH_LIST.forEach((mech) => {
+    const P = [], Y = [];
+    bus.forEach(({ u, cell }) => {
+      const r = roleOf(u.id)[mech] || "";
+      if (r.includes("p")) P.push({ u, cell });
+      if (r.includes("y")) Y.push({ u, cell });
+    });
+    if (!P.length && !Y.length) return;
+    const label = MECH_DEFS[mech].label;
+    const strength = Y.reduce((s, { u, cell }) => s + payoffWeight(u, cell), 0);
+    const supply = P.reduce((s, { u, cell }) => s + supplyWeight(u, cell), 0);
+    const nm = (arr) => arr.map((x) => x.u.n).join(", ");
+    if (P.length && Y.length) {
+      const f = Math.max(0.6, Math.min(2.4, 0.5 + supply * 0.4));
+      const pts = Math.round(strength * f);
+      if (pts > 0) items.push({ pts, label: `Combo ${label}: ${nm(P)} → ${nm(Y)}` });
+    } else if (Y.length) {
+      const pts = Math.round(strength * 0.15);
+      items.push({ pts, label: `${label}: có ${nm(Y)} nhưng THIẾU NGUỒN (điểm bị hạ mạnh)` });
+    } else if (P.length >= 2) {
+      const pts = Math.round(Math.min(supply, 4) * 1.2);
+      if (pts > 0) items.push({ pts, label: `${label}: ${P.length} nguồn nhưng chưa có quân hưởng lợi` });
+    }
+  });
+  return { items };
+}
+
 /* ============ CHẤM ĐIỂM ============ */
 function scoreBoard(board, ovr) {
   const bus = board.filter(Boolean).map((x) => ({ u: UNITS[x.id], cell: x }));
@@ -100,8 +213,11 @@ function scoreBoard(board, ovr) {
   statPts = Math.round(statPts);
   items.push({ pts: statPts, label: "Hiệu suất chỉ số so với mặt bằng cấp" });
   total += statPts;
+  // Combo cơ chế (Nguồn → Hưởng lợi) — thay cho việc đếm phẳng ở các hệ đã có engine
+  comboScore(bus).items.forEach((it) => { items.push(it); total += it.pts; });
+  // Cộng hưởng cùng hệ cho các tag CHƯA có engine combo riêng
   const tagCount = {};
-  bus.forEach(({ u }) => u.tags.forEach((t) => (tagCount[t] = (tagCount[t] || 0) + 1)));
+  bus.forEach(({ u }) => u.tags.forEach((t) => { if (!MECH_TAGS.has(t)) tagCount[t] = (tagCount[t] || 0) + 1; }));
   Object.entries(tagCount).forEach(([t, n]) => {
     if (n >= 2) { const pts = ((n * (n - 1)) / 2) * 4; items.push({ pts, label: `${n} thẻ cùng hệ ${TAG_LABEL[t] || t}` }); total += pts; }
   });
@@ -216,6 +332,40 @@ function buildPlan(g, ovr) {
       const b2 = [...g.board]; b2[slot] = { ...it };
       const d = scoreBoard(b2, ovr).total - cur.total;
       actions.push({ pri: 70 + d, txt: `Triển khai "${UNITS[it.id].n}" lv${it.lv + 1} từ Túi (miễn phí) → +${d} điểm.` });
+    });
+  }
+
+  // --- 3b. Cố vấn combo Nguồn → Hưởng lợi ---
+  {
+    const buyable = (mech, role) => UNITS.filter((u) => !u.sum
+      && (roleOf(u.id)[mech] || "").includes(role)
+      && u.c <= g.temple
+      && (g.tribes.includes(u.t) || u.t === "NEUTRAL")).map((u) => u.n);
+    MECH_LIST.forEach((mech) => {
+      const label = MECH_DEFS[mech].label;
+      const P = boardCells.filter((c) => (roleOf(c.id)[mech] || "").includes("p"));
+      const Y = boardCells.filter((c) => (roleOf(c.id)[mech] || "").includes("y"));
+      const nm = (arr) => arr.map((c) => UNITS[c.id].n).join(", ");
+      if (Y.length && !P.length) {
+        const src = buyable(mech, "p").slice(0, 4);
+        actions.push({ pri: 67, txt: `⚠ Combo ${label}: đang có ${nm(Y)} (quân HƯỞNG LỢI) nhưng THIẾU NGUỒN tạo sự kiện — ưu tiên tìm mua ${src.length ? src.join(" / ") : "nguồn " + label}.` });
+      } else if (P.length && !Y.length) {
+        const pay = buyable(mech, "y").slice(0, 4);
+        if (pay.length) notes.push(`Combo ${label}: đội có nguồn (${nm(P)}) nhưng chưa có quân hưởng lợi — cân nhắc thêm ${pay.join(" / ")}.`);
+      } else if (P.length && Y.length) {
+        notes.push(`✓ Combo ${label} đủ bộ: nguồn ${nm(P)} → hưởng lợi ${nm(Y)}.`);
+      }
+    });
+    // Miếng ghép combo đang bán trong Thánh Đền
+    (g.shop.units || []).filter(Boolean).forEach((s) => {
+      if (g.gold < 3) return;
+      MECH_LIST.forEach((mech) => {
+        const role = roleOf(s.id)[mech] || "";
+        if (!role) return;
+        const oppRole = role.includes("p") ? "y" : "p";
+        if (boardCells.some((c) => (roleOf(c.id)[mech] || "").includes(oppRole)))
+          actions.push({ pri: 69, txt: `Mua "${UNITS[s.id].n}" (3 vàng) — hoàn thiện combo ${MECH_DEFS[mech].label}: ghép ${role.includes("p") ? "NGUỒN" : "PAYOFF"} với quân ${role.includes("p") ? "hưởng lợi" : "nguồn"} đang có trên sân.` });
+      });
     });
   }
 

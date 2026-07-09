@@ -1,0 +1,1848 @@
+================================================================
+                  MYTHIC TACTICS — GAME DESIGN
+================================================================
+
+
+================================================================
+I. THUẬT NGỮ
+================================================================
+
+----------------------------------------------------------------
+  1. THỜI GIAN & KHÔNG GIAN   [MỤC MỚI]
+----------------------------------------------------------------
+
+[TRẬN]
+  Toàn bộ trò chơi, từ lúc bắt đầu đến khi thắng/thua chung cuộc.
+  Hiệu ứng ghi "trong trận này" tồn tại đến hết TRẬN.
+
+[VÒNG] (còn gọi là LƯỢT)
+  Một chu kỳ gồm: giai đoạn Tuyển quân → 1 Trận chiến.
+  "Lượt sau" / "cho đến lượt sau" = kéo dài đến hết vòng kế tiếp.
+
+[TRẬN CHIẾN]
+  Giai đoạn chiến đấu trong một vòng. Hiệu ứng ghi
+  "N lần trong chiến đấu" đếm lại từ đầu ở mỗi trận chiến.
+
+[SÂN]
+  Mỗi người chơi có sân 2 HÀNG × 3 CỘT (hàng trước / hàng sau),
+  tối đa 6 quân.
+    CÙNG HÀNG   : Các ô nằm ngang cùng một hàng.
+    CÙNG CỘT    : 2 ô trước–sau cùng một cột.
+    BÊN CẠNH    : Ô kề trái/phải trên cùng hàng.
+    LIỀN KỀ     : Ô kề trái/phải + ô cùng cột (tối đa 3 ô).
+    PHÍA TRƯỚC  : Ô hàng trước cùng cột với đơn vị hàng sau.
+    ĐỐI DIỆN    : Ô cùng cột thuộc sân đối phương.
+
+[TAY]
+  Nơi chứa quân chưa triển khai, phép thánh đền, tiên đan.
+
+----------------------------------------------------------------
+  2. KINH TẾ & THÁNH ĐỀN
+----------------------------------------------------------------
+
+[THÁNH ĐỀN]
+  Nơi mua quân trong giai đoạn tuyển quân.
+  Số quân trong THÁNH ĐỀN = Cấp THÁNH ĐỀN + 2 (tối đa 6 quân).
+  Được làm mới tự động sau mỗi vòng.
+
+[CẤP THÁNH ĐỀN]  — Tối đa cấp 6
+  Chi phí lên cấp giảm 1 vàng mỗi vòng (min = 0),
+  reset về giá mốc tiếp theo khi lên cấp thành công.
+    Cấp 1 → 2 :  5 vàng
+    Cấp 2 → 3 :  7 vàng
+    Cấp 3 → 4 :  8 vàng
+    Cấp 4 → 5 : 10 vàng
+    Cấp 5 → 6 : 10 vàng
+
+[PHÉP THÁNH ĐỀN]
+  Mỗi lần THÁNH ĐỀN được làm mới → xuất hiện 1 phép thánh đền
+  ngẫu nhiên có thể mua.
+  Giá mặc định của phép = CẤP của phép (vàng).
+  Nếu trên thẻ ghi giá riêng thì dùng giá trên thẻ.
+
+[VÀNG]
+  Dùng để: mua quân | nâng cấp THÁNH ĐỀN | mua phép thánh đền.
+  Vòng 1 bắt đầu với 3 vàng, tăng +1 mỗi vòng, tối đa 10 vàng.
+  Vàng KHÔNG giữ qua vòng — reset về mức mặc định đầu vòng mới.
+  Giới hạn vàng tối đa có thể thay đổi nhờ một số hiệu ứng.
+  Vàng nhận thêm từ hiệu ứng ("Nhận X Vàng vào lượt sau") được
+  cộng vượt giới hạn 10 vàng.
+
+[THU NHẬP]
+  Số vàng mặc định sẽ nhận được vào đầu vòng sau.
+
+[ĐỔI LẠI]  (= LÀM MỚI THÁNH ĐỀN)
+  Tốn 1 vàng → thay toàn bộ quân và phép thánh đền mới.
+  "Lượt ĐỔI LẠI miễn phí" = lần đổi lại không tốn vàng.
+
+[ĐÓNG BĂNG]
+  Giữ nguyên trạng thái THÁNH ĐỀN sang vòng sau,
+  bỏ qua lần làm mới tự động.
+
+[PHẦN THƯỞNG THĂNG CẤP]
+  1 phép thánh đền nhận được mỗi khi thăng cấp thành công
+  1 đơn vị quân (3 lá lv1 → lv2 | 2 lá lv2 → lv3).
+
+----------------------------------------------------------------
+  3. THẺ BÀI ĐẶC BIỆT
+----------------------------------------------------------------
+
+[TIÊN ĐAN]
+  Thẻ bài đặc biệt dành riêng cho tộc SHENZHOU, không có giá,
+  chỉ nhận được qua hiệu ứng. Khác với phép thánh đền.
+  CHỈ SỐ CỘNG THÊM CỦA TIÊN ĐAN: là bộ đếm chung của người chơi,
+  cộng dồn trong suốt TRẬN đấu, được thay đổi bởi hiệu ứng của
+  các đơn vị (HỖN ĐỘN, THỎ NGỌC, TRIỆU KHỔNG MINH).
+  VÍ DỤ:
+    Chỉ số cộng thêm là 0/0 → dùng BỘI LỰC ĐAN (+1 SÁT THƯƠNG)
+    thì nhận 1 SÁT THƯƠNG.
+    Chỉ số cộng thêm là 5/5 → dùng BỘI LỰC ĐAN thì nhận
+    1 + 5 = 6 SÁT THƯƠNG.
+
+[THẦN BẢO HỘ]
+  Đơn vị đặc biệt có kỹ năng riêng, chọn 1 trước mỗi TRẬN.
+  Không phải quân, không mua/bán được, không đứng trên sân.
+
+[VẬT TRIỆU HỒI]
+  Thẻ chỉ xuất hiện qua cơ chế kỹ năng nhất định,
+  không mua được ở THÁNH ĐỀN.
+  Cấp độ (lv) của VẬT TRIỆU HỒI = lv của đơn vị/hiệu ứng
+  tạo ra nó.   [QUY TẮC MỚI]
+
+----------------------------------------------------------------
+  4. KEYWORD — TRIGGER (kích hoạt theo điều kiện)
+----------------------------------------------------------------
+  TRIỂN KHAI  : Kích hoạt khi đơn vị được đặt xuống sân trong giai đoạn tuyển quân.
+  KẾT LƯỢT    : Kích hoạt cuối giai đoạn tuyển quân.
+  KHAI TRẬN   : Kích hoạt khi trận chiến bắt đầu.
+  TẤN CÔNG    : Kích hoạt khi đơn vị tấn công.
+  PHẢN CÔNG   : Kích hoạt ngay trước khi đơn vị phản công.
+  TỬ VONG     : Kích hoạt khi đơn vị chết.
+  TÁI SINH    : Kích hoạt khi đơn vị được hồi sinh.
+  KẾT LIỄU(N) : Kích hoạt khi đơn vị tiêu diệt kẻ địch,
+                với N là số mạng địch cần tiêu diệt cho 1 lần
+                kích hoạt.
+  LUYỆN ĐAN(N): Kích hoạt mỗi khi ngươi đã sử dụng đủ N TIÊN ĐAN
+                kể từ lần kích hoạt trước (bộ đếm riêng của từng
+                đơn vị, chỉ đếm khi đơn vị ở trên sân).  [MỚI]
+  LẶP LẠI N LẦN: Khi hiệu ứng được kích hoạt, kích hoạt thêm
+                N lần nữa (tổng = 1 + N lần).
+  N LẦN TRONG CHIẾN ĐẤU: Trong 1 trận chiến, hiệu ứng chỉ được
+                kích hoạt gốc tối đa N lần. Các lần "LẶP LẠI"
+                không tính vào giới hạn này.
+                VÍ DỤ: Hiệu ứng có "LẶP LẠI 2 LẦN" và giới hạn
+                "4 LẦN TRONG CHIẾN ĐẤU" → tối đa 4 lần kích hoạt
+                gốc, mỗi lần kèm 2 lần lặp → tổng 4 × (1+2) = 12.
+
+----------------------------------------------------------------
+  5. KEYWORD — HÀNH ĐỘNG   [MỤC MỚI]
+----------------------------------------------------------------
+  TRIỆU TẬP  : Xem 3 thẻ bài, chọn 1 để nhận vào tay.
+  TRIỆU HỒI  : Đưa trực tiếp 1 đơn vị lên sân (không qua tay,
+               không tốn vàng). Nếu sân đầy, không triệu hồi được.
+  HẤP THỤ    : Loại bỏ đơn vị mục tiêu, cộng toàn bộ chỉ số (SÁT THƯƠNG/MÁU) của nó vào đơn vị hấp thụ, "VĨNH VIỄN". có kích hoạt "TỬ VONG".
+  HỦY DIỆT   : Tiêu diệt đơn vị ngay lập tức, bất kể MÁU và LÁ CHẮN. Vẫn kích hoạt TỬ VONG.
+  LOẠI BỎ    : Đưa thẻ ra khỏi TRẬN đấu. có kích hoạt TỬ VONG.
+  DO THÁM    : Xem trước đơn vị địch sẽ nằm ở vị trí được chọn
+               trong trận chiến kế tiếp.
+
+----------------------------------------------------------------
+  6. KEYWORD — PASSIVE / TRẠNG THÁI (hiệu ứng thường trực)
+----------------------------------------------------------------
+  KHIÊU KHÍCH : Ép tất cả kẻ địch ưu tiên tấn công đơn vị này.
+  TẦM XA      : Không bị phản công khi tấn công, nhưng cũng
+                không thể phản công khi bị tấn công.
+  LÁ CHẮN     : Chặn toàn bộ sát thương của lần nhận sát thương
+                tiếp theo, sau đó biến mất.
+  TÁI SINH (trạng thái): Lần đầu chết trong trận chiến, đơn vị
+                hồi sinh với 1 MÁU rồi mất trạng thái này.
+                "TÁI SINH với toàn bộ SÁT THƯƠNG" = hồi sinh và
+                giữ nguyên chỉ số SÁT THƯƠNG hiện tại.  [MỚI]
+  HIỂM ĐỘC    : Hủy diệt đơn vị đầu tiên bị đơn vị này gây
+                sát thương (dùng 1 lần rồi mất).
+  ĐỐT(N)      : Khi hiệu ứng/đòn đánh này gây sát thương,
+                gây thêm N sát thương bổ sung lên mục tiêu.
+                ĐỐT từ nhiều nguồn cộng dồn.
+  ẨN THÂN     : Không thể bị kẻ địch chọn làm mục tiêu tấn công
+                hay kỹ năng. Mất ẨN THÂN sau khi đơn vị này tấn
+                công hoặc gây sát thương. 
+  SUY YẾU     : Đơn vị này sẽ nhận x2 sát thương. 
+  XUYÊN KÍCH  : Khi tấn công, gây sát thương bằng SÁT THƯƠNG của
+                đơn vị này lên cả mục tiêu phía sau
+  TRẢM KÍCH   : Khi tấn công, gây sát thương bằng SÁT THƯƠNG của
+                đơn vị này lên cả 2 kẻ địch bên cạnh mục tiêu.
+                [MỚI]
+  LIÊN KÍCH   : Đơn vị tấn công 2 lần mỗi khi đến lượt tấn công.
+                [MỚI]
+  KHÔNG THỂ TẤN CÔNG: Không thể tấn công nhưng vẫn có thể
+                phản công.
+  HÀO QUANG   : Hiệu ứng của đơn vị luôn kích hoạt khi đơn vị
+                còn sống.
+  VĨNH VIỄN   : Cường hóa được giữ nguyên qua các trận chiến,
+                đến hết TRẬN. Cường hóa KHÔNG ghi VĨNH VIỄN chỉ
+                tồn tại trong trận chiến hiện tại (hoặc theo
+                thời hạn ghi trên thẻ).  [MỚI]
+
+
+================================================================
+II. CƠ CHẾ GAME
+================================================================
+
+--- CẤU TRÚC TRẬN ĐẤU -------------------------------------------
+  • TRẬN đấu gồm nhiều VÒNG, xen kẽ giai đoạn "Tuyển quân"
+    và "Chiến đấu".
+  • Người chơi có 5 mạng. Thua 1 trận chiến → mất 1 mạng.
+    Về 0 mạng → thua TRẬN.
+  • Thắng đủ 10 trận chiến → thắng TRẬN.
+  • Mỗi TRẬN chỉ xuất hiện quân của 3 tộc ngẫu nhiên
+    + 1 tộc cố định: NEUTRAL.
+  • Mỗi TRẬN chọn 1 "THẦN BẢO HỘ" trước khi bắt đầu.
+
+--- GIAI ĐOẠN TUYỂN QUÂN ---------------------------------------
+  • Mua quân: 3 vàng  |  Bán quân: 1 vàng  (cố định với mọi quân)
+  • Nâng cấp quân: 3 lá lv1 → lv2  |  2 lá lv2 → lv3
+    (THÁNH ĐỀN chỉ bán quân lv1).
+  • Triển khai tối đa 6 quân trên sân (2 hàng × 3 cột).
+    Quân đã triển khai KHÔNG thu về tay được (vẫn bán được).
+  • Quân chưa triển khai / phép thánh đền / tiên đan → nằm
+    trên TAY.
+  • Chỉ số cộng thêm từ TIÊN ĐAN cộng dồn trong suốt TRẬN đấu.
+
+--- GIAI ĐOẠN CHIẾN ĐẤU  [ĐỀ XUẤT - CẦN XÁC NHẬN] --------------
+  • Hai đội hình đối đầu; các đơn vị luân phiên tấn công giữa
+    2 bên, theo thứ tự trái → phải, hàng trước → hàng sau.
+    Bên có nhiều quân hơn đánh trước (bằng nhau → ngẫu nhiên).
+  • Mục tiêu mặc định: 1 kẻ địch ngẫu nhiên ở HÀNG TRƯỚC.
+    Hàng trước trống → được đánh hàng sau.
+    KHIÊU KHÍCH ghi đè mục tiêu mặc định.
+  • Khi 1 đơn vị tấn công 1 đơn vị khác, nó cũng nhận sát thương
+    "PHẢN CÔNG" bằng SÁT THƯƠNG của địch (trừ khi có TẦM XA
+    hoặc mục tiêu KHÔNG THỂ phản công).
+  • Trận chiến kết thúc khi một bên hết đơn vị trên sân.
+    Cả hai hết cùng lúc → hòa, không ai mất mạng.
+
+
+================================================================
+III. THẦN BẢO HỘ
+================================================================
+
+Format: [TÊN] | [Loại kỹ năng] | [Mô tả]
+
+----------------------------------------------------------------
+HORUS
+  Mắt thần Horus  (4 vàng | CD: 1 lượt)
+  Triệu tập 1 đơn vị cao hơn 1 CẤP so với cấp THÁNH ĐỀN hiện tại.
+  (Nếu THÁNH ĐỀN đã cấp 6 → triệu tập đơn vị CẤP 6.)
+
+RA
+  Phước lành thái dương  (Nội tại)
+  Sau khi triệu hồi 1 đơn vị trong chiến đấu → cho nó +1/+1 và KHIÊU KHÍCH.
+
+ENLIL  [Mở khóa vòng 3]
+  Quyền năng tối cao  (1 lần / trận)
+  Thăng cấp cho 1 đồng minh.
+
+ISHTAR
+  Trái tim dũng mãnh  (Nội tại)
+  Nhận thêm 3 mạng khi vào trận.
+
+ZEUS  [Mở khóa vòng 3]
+  Tia chớp của Zeus  (1 vàng | CD: 1 lượt)
+  KHAI TRẬN: Gây 3 sát thương lên kẻ địch nhiều máu nhất. +3 sát thương mỗi khi sử dụng Phép thánh đền "SÁT THƯƠNG" cộng dồn cả trận đấu.
+
+ODIN
+  Vinh quang từ Valhalla  (Nội tại)
+  Sau khi đồng minh kết liễu 15 kẻ địch HOẶC kích hoạt KẾT LIỄU 9 lần
+  → nhận 1 Phần thưởng Thăng cấp.
+
+NHỊ LANG THẦN
+  Hạo thiên Khuyển  (Nội tại)
+  Sau khi 20 Tiên đan được sử dụng → nhận một Hạo thiên Khuyển.
+
+SET
+  Cắt xén (3 vàng | CD: 1 lượt)
+  Phá hủy 1 đồng minh NILES, các đơn vị NILES có thêm sát thương bằng với CẤP của đơn vị phá hủy (Bất kể ở đâu). Giảm 1 vàng nếu không sử dụng trong lượt này (min=0)
+
+ANU
+  Thăng hoa (2 vàng | CD: 1 lượt)
+  Chọn 1 đơn vị, sau đó chọn 1 đơn vị Bậc cao hơn. Biến đơn vị bậc thấp thành bậc cao vừa chọn
+
+NERGAL
+  Xiềng xích địa ngục (1 vàng | CD: 1 lượt)
+  Chọn 1 đơn vị trong "Thánh đền", cho nó +2/+2 và khóa nó trong tay ngươi trong 2 Lượt
+
+
+----------------------------------------------------------------
+
+
+================================================================
+IV. ĐƠN VỊ QUÂN
+================================================================
+
+  Format chỉ số : ATK/HP lv1  →  ATK/HP lv2  →  ATK/HP lv3
+  Số trong ngoặc : lv1 / lv2 / lv3  (nếu chỉ số thay đổi theo cấp)
+
+
+════════════════════════════════════════════════════════════════
+  TỘC: NILES
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 ------------------------------------------------
+
+ANUBIS                                                  [Cấp 6]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh chết → cho đồng minh thấp máu nhất "TÁI SINH" (1 lần trong chiến đấu)
+    lv2: Sau khi 1 đồng minh chết → cho đồng minh thấp máu nhất "TÁI SINH" (2 lần trong chiến đấu)
+    lv3: Sau khi 1 đồng minh chết → cho đồng minh thấp máu nhất "TÁI SINH" (3 lần trong chiến đấu)
+
+SEKHMET                                                 [Cấp 6]
+  Chỉ số :  9/3  →  18/6  →  36/12
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh được triệu hồi trong chiến đấu → phá hủy nó. (2 lần trong chiến đấu). TỬ VONG: Triệu hồi bản sao nguyên bản của những đồng minh đã hấp thụ.
+    lv2: Sau khi 1 đồng minh được triệu hồi trong chiến đấu → phá hủy nó. (4 lần trong chiến đấu). TỬ VONG: Triệu hồi bản sao nguyên bản của những đồng minh đã hấp thụ.
+    lv3: Sau khi 1 đồng minh được triệu hồi trong chiến đấu → phá hủy nó. (6 lần trong chiến đấu). TỬ VONG: Triệu hồi bản sao nguyên bản của những đồng minh đã hấp thụ.
+
+OSIRIS                                                  [Cấp 6]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh "TÁI SINH", cho nó chỉ số của OSIRIS
+    lv2: Sau khi 1 đồng minh "TÁI SINH", cho nó gấp đôi chỉ số của OSIRIS
+    lv3: Sau khi 1 đồng minh "TÁI SINH", cho nó gấp ba chỉ số của OSIRIS
+
+-------- CẤP 5 ------------------------------------------------
+
+SOBEK                                                   [Cấp 5]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: Sobek nhận +1/+1 cho mỗi đồng minh NILES được triệu hồi trong trận (bất kể đơn vị này ở đâu).
+    lv2: Sobek nhận +2/+2 cho mỗi đồng minh NILES được triệu hồi trong trận (bất kể đơn vị này ở đâu).
+    lv3: Sobek nhận +4/+4 cho mỗi đồng minh NILES được triệu hồi trong trận (bất kể đơn vị này ở đâu).
+
+BASTET                                                  [Cấp 5]
+  Chỉ số :  4/8  →  8/16  →  16/32
+  Kỹ năng:
+    lv1: Sau khi triệu hồi 3 đồng minh trong chiến đấu. Đồng minh NILES nhận +1/+1 lượt này. (Tăng thêm +1/+1 mỗi lần kích hoạt)
+    lv2: Sau khi triệu hồi 3 đồng minh trong chiến đấu. Đồng minh NILES nhận +1/+1 lượt này. (Tăng thêm +2/+2 mỗi lần kích hoạt)
+    lv3: Sau khi triệu hồi 3 đồng minh trong chiến đấu. Đồng minh NILES nhận +1/+1 lượt này. (Tăng thêm +4/+4 mỗi lần kích hoạt)
+
+THOTH                                                   [Cấp 5]
+  Chỉ số :  7/5  →  14/10  →  28/20
+  Kỹ năng:
+    lv1: "TÁI SINH"-"TỬ VONG": Đồng minh NILES được +2 sát thương lượt này (bất kể ở đâu).
+    lv2: "TÁI SINH"-"TỬ VONG": Đồng minh NILES được +4 sát thương lượt này (bất kể ở đâu).
+    lv3: "TÁI SINH"-"TỬ VONG": Đồng minh NILES được +8 sát thương lượt này (bất kể ở đâu).
+
+ISIS                                                    [Cấp 5]
+  Chỉ số :  2/9  →  4/18  →  8/36
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh "TÁI SINH", cho tất cả đồng minh nhận +3/+3 "VĨNH VIỄN".
+    lv2: Sau khi 1 đồng minh "TÁI SINH", cho tất cả đồng minh nhận +6/+6 "VĨNH VIỄN".
+    lv3: Sau khi 1 đồng minh "TÁI SINH", cho tất cả đồng minh nhận +12/+12 "VĨNH VIỄN".
+
+-------- CẤP 4 ------------------------------------------------
+
+SEPOPARD                                                [Cấp 4]
+  Chỉ số :  5/2  →  10/4  →  20/8
+  Kỹ năng:
+    lv1: Bất cứ khi nào triệu hồi 1 đồng minh trong chiến đấu, cho nó +4/+4.
+    lv2: Bất cứ khi nào triệu hồi 1 đồng minh trong chiến đấu, cho nó +8/+8.
+    lv3: Bất cứ khi nào triệu hồi 1 đồng minh trong chiến đấu, cho nó +16/+16.
+
+NEFERTEM                                                [Cấp 4]
+  Chỉ số :  4/2  →  8/4  →  16/8
+  Kỹ năng:
+    lv1: "TỬ VONG": Cho 1 đồng minh NILES khác "TÁI SINH".
+    lv2: "TỬ VONG": Cho 2 đồng minh NILES khác "TÁI SINH".
+    lv3: "TỬ VONG": Cho 3 đồng minh NILES khác "TÁI SINH".
+
+SA TINH                                                 [Cấp 4]
+  Chỉ số :  6/2  →  12/4  →  24/8
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 "Chiến binh NILES".
+    lv2: "TỬ VONG": Triệu hồi 2 "Chiến binh NILES".
+    lv3: "TỬ VONG": Triệu hồi 3 "Chiến binh NILES".
+
+UPAMAKI                                                 [Cấp 4]
+  Chỉ số :  5/3  →  10/6  →  20/12
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Chọn 1 đồng minh NILES khác để tiêu diệt. "TỬ VONG": Triệu hồi bản sao gốc của đồng minh đó.
+    lv2: "TRIỂN KHAI": Chọn 1 đồng minh NILES khác để tiêu diệt. "TỬ VONG": Triệu hồi bản sao gốc +4/+4 của đồng minh đó.
+    lv3: "TRIỂN KHAI": Chọn 1 đồng minh NILES khác để tiêu diệt. "TỬ VONG": Triệu hồi bản sao gốc +8/+8 của đồng minh đó.
+
+-------- CẤP 3 ------------------------------------------------
+
+MIÊU CUNG THỦ                                          [Cấp 3]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TẦM XA"-"KHAI TRẬN": Kích hoạt hiệu ứng "TỬ VONG" của đồng minh cùng cột 1 lần.
+    lv2: "TẦM XA"-"KHAI TRẬN": Kích hoạt hiệu ứng "TỬ VONG" của đồng minh cùng cột 2 lần.
+    lv3: "TẦM XA"-"KHAI TRẬN": Kích hoạt hiệu ứng "TỬ VONG" của đồng minh cùng cột 3 lần.
+
+KẺ TÀ GIÁO                                             [Cấp 3]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: Sau khi 3 đồng minh bị kết liễu, đồng minh NILES có +1 sát thương lượt này (bất kể ở đâu).
+    lv2: Sau khi 3 đồng minh bị kết liễu, đồng minh NILES có +2 sát thương lượt này (bất kể ở đâu).
+    lv3: Sau khi 3 đồng minh bị kết liễu, đồng minh NILES có +4 sát thương lượt này (bất kể ở đâu).
+
+BỌ CẠP                                                 [Cấp 3]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "HIỂM ĐỘC": Hủy diệt đơn vị đầu tiên bị gây sát thương.
+    lv2: "HIỂM ĐỘC": Hủy diệt đơn vị đầu tiên bị gây sát thương.
+    lv3: "HIỂM ĐỘC": Hủy diệt đơn vị đầu tiên bị gây sát thương.
+
+AMMIT                                                   [Cấp 3]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh NILES chết → nhận +1/+1 "VĨNH VIỄN".
+    lv2: Sau khi 1 đồng minh NILES chết → nhận +2/+2 "VĨNH VIỄN".
+    lv3: Sau khi 1 đồng minh NILES chết → nhận +4/+4 "VĨNH VIỄN".
+
+-------- CẤP 2 ------------------------------------------------
+
+LINH CẨU ĐẠO TẶC                                       [Cấp 2]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận 1 phép thánh đền "Đồng vàng cổ".
+    lv2: "TRIỂN KHAI": Nhận 2 phép thánh đền "Đồng vàng cổ".
+    lv3: "TRIỂN KHAI": Nhận 3 phép thánh đền "Đồng vàng cổ".
+
+BABI                                                    [Cấp 2]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "TÁI SINH": Đơn vị này nhận +1 sát thương cho mỗi lần "BABI" chết trong trận (bất kể đơn vị này ở đâu).
+    lv2: "TÁI SINH": Đơn vị này nhận +2 sát thương cho mỗi lần "BABI" chết trong trận (bất kể đơn vị này ở đâu).
+    lv3: "TÁI SINH": Đơn vị này nhận +4 sát thương cho mỗi lần "BABI" chết trong trận (bất kể đơn vị này ở đâu).
+
+ĐẠI TƯỚNG NILES                                        [Cấp 2]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: Bất cứ khi nào triệu hồi 1 đồng minh → nhận +1/+1.
+    lv2: Bất cứ khi nào triệu hồi 1 đồng minh → nhận +2/+2.
+    lv3: Bất cứ khi nào triệu hồi 1 đồng minh → nhận +4/+4.
+
+TAWARET                                                 [Cấp 2]
+  Chỉ số :  0/1  →  0/2  →  0/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 "Medjed Đen" và 1 "Medjed Trắng", cho chúng +1/+1.
+    lv2: "TỬ VONG": Triệu hồi 1 "Medjed Đen" và 1 "Medjed Trắng", cho chúng +2/+2.
+    lv3: "TỬ VONG": Triệu hồi 1 "Medjed Đen" và 1 "Medjed Trắng", cho chúng +4/+4.
+
+-------- CẤP 1 ------------------------------------------------
+
+CHIẾN BINH NILES                                        [Cấp 1]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 "XÁC ƯỚP".
+    lv2: "TỬ VONG": Triệu hồi 2 "XÁC ƯỚP".
+    lv3: "TỬ VONG": Triệu hồi 3 "XÁC ƯỚP".
+
+GRIFFIN                                                 [Cấp 1]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH"-"TÁI SINH"
+    lv2: "KHIÊU KHÍCH"-"TÁI SINH": Sau khi được "TÁI SINH" nhận +2/+2
+    lv3: "KHIÊU KHÍCH"-"TÁI SINH": Sau khi được "TÁI SINH" nhận +4/+6
+
+-------- VẬT TRIỆU HỒI ---------------------------------------
+
+MEDJED ĐEN                                    [VẬT TRIỆU HỒI]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:  KHIÊU KHÍCH.
+  Nguồn   :  Tawaret (TỬ VONG)
+
+MEDJED TRẮNG                                  [VẬT TRIỆU HỒI]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:  KHIÊU KHÍCH.
+  Nguồn   :  Tawaret (TỬ VONG)
+
+XÁC ƯỚP                                       [VẬT TRIỆU HỒI]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:  —
+  Nguồn   :  Chiến binh NILES (TỬ VONG)
+
+
+════════════════════════════════════════════════════════════════
+  TỘC: OLYMPUS
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+ARES                                                    [Cấp 6]
+  Chỉ số :  8/6  →  16/12  →  32/24
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Cho 1 đồng minh ngẫu nhiên khác ×1 sát thương của "ARES" và "LÁ CHẮN".
+    lv2: "TẤN CÔNG": Cho 1 đồng minh ngẫu nhiên khác ×2 sát thương của "ARES" và "LÁ CHẮN".
+    lv3: "TẤN CÔNG": Cho 1 đồng minh ngẫu nhiên khác ×3 sát thương của "ARES" và "LÁ CHẮN".
+
+APOLO                                                   [Cấp 6]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    TẦM XA.
+    lv1: Khi 1 đồng minh nhận "LÁ CHẮN" → lập tức tấn công và ĐỐT(6) mục tiêu. (1 lần trong chiến đấu)
+    lv2: Khi 1 đồng minh nhận "LÁ CHẮN" → lập tức tấn công và ĐỐT(6) mục tiêu. (3 lần trong chiến đấu)
+    lv3: Khi 1 đồng minh nhận "LÁ CHẮN" → lập tức tấn công và ĐỐT(6) mục tiêu. (999 lần trong chiến đấu)
+
+ATHENA                                                  [Cấp 6]
+  Chỉ số :  6/12  →  12/24  →  24/48
+  Kỹ năng:
+    lv1: Sau khi 1 đồng minh nhận LÁ CHẮN → tất cả đồng minh nhận +2/+2 và đồng minh đó tấn công ngay lập tức. (2 lần trong chiến đấu)
+    lv2: Sau khi 1 đồng minh nhận LÁ CHẮN → tất cả đồng minh nhận +4/+4 và đồng minh đó tấn công ngay lập tức. (3 lần trong chiến đấu)
+    lv3: Sau khi 1 đồng minh nhận LÁ CHẮN → tất cả đồng minh nhận +8/+8 và đồng minh đó tấn công ngay lập tức. (999 lần trong chiến đấu)
+
+-------- CẤP 5 ------------------------------------------------
+
+HECATE                                                  [Cấp 5]
+  Chỉ số :  3/7  →  6/14  →  12/28
+  Kỹ năng:
+    lv1: Mỗi khi sử dụng "PHÉP THÁNH ĐỀN" → đồng minh Olympus nhận +2/+1
+    lv2: Mỗi khi sử dụng "PHÉP THÁNH ĐỀN" → đồng minh Olympus nhận +4/+2
+    lv3: Mỗi khi sử dụng "PHÉP THÁNH ĐỀN" → đồng minh Olympus nhận +8/+4
+
+MEDUSA                                                  [Cấp 5]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Biến chỉ số mục tiêu thành 1/1. (1 lần trong chiến đấu)
+    lv2: "TẤN CÔNG": Biến chỉ số mục tiêu thành 1/1. (2 lần trong chiến đấu)
+    lv3: "TẤN CÔNG": Biến chỉ số mục tiêu thành 1/1. (3 lần trong chiến đấu)
+
+TYPHON                                                  [Cấp 5]
+  Chỉ số :  9/9  →  18/18  →  36/36
+  Kỹ năng:
+    lv1: "TẤN CÔNG": ĐỐT(6) mục tiêu và tất cả kẻ địch.
+    lv2: "TẤN CÔNG": ĐỐT(12) mục tiêu và tất cả kẻ địch.
+    lv3: "TẤN CÔNG": ĐỐT(18) mục tiêu và tất cả kẻ địch.
+
+ARTEMIS                                                 [Cấp 5]
+  Chỉ số :  8/3  →  16/6  →  32/12
+  Kỹ năng:
+    lv1: "TẦM XA": Luôn tấn công kẻ địch thấp máu nhất. "KẾT LIỄU(1)": Cho 1 đồng minh Olympus khác "LÁ CHẮN".
+    lv2: "TẦM XA": Luôn tấn công kẻ địch thấp máu nhất. "KẾT LIỄU(1)": Cho 2 đồng minh Olympus khác "LÁ CHẮN".
+    lv3: "TẦM XA": Luôn tấn công kẻ địch thấp máu nhất. "KẾT LIỄU(1)": Cho 4 đồng minh Olympus khác "LÁ CHẮN".
+
+AETHER & HEMERA                                         [Cấp 5]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: Khi đồng minh phía trước đơn vị này bị tấn công → cho nó +4 "MÁU" và "LÁ CHẮN". (1 lần trong chiến đấu)
+    lv2: Khi đồng minh phía trước đơn vị này bị tấn công → cho nó +8 "MÁU" và "LÁ CHẮN". (2 lần trong chiến đấu)
+    lv3: Khi đồng minh phía trước đơn vị này bị tấn công → cho nó +16 "MÁU" và "LÁ CHẮN". (3 lần trong chiến đấu)
+
+-------- CẤP 4 ------------------------------------------------
+
+CHIMERA                                                 [Cấp 4]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: "TẤN CÔNG"-"PHẢN CÔNG": ĐỐT(3) tất cả kẻ địch cùng cột với mục tiêu.
+    lv2: "TẤN CÔNG"-"PHẢN CÔNG": ĐỐT(6) tất cả kẻ địch cùng cột + 1 cột kế bên.
+    lv3: "TẤN CÔNG"-"PHẢN CÔNG": ĐỐT(6) tất cả kẻ địch cùng cột + mọi cột liền kề.
+
+MINOTAUR                                                [Cấp 4]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "KHAI TRẬN": Cho 1 đồng minh Olympus ngẫu nhiên +5/+5 và LÁ CHẮN.
+    lv2: "KHAI TRẬN": Cho 2 đồng minh Olympus ngẫu nhiên +5/+5 và LÁ CHẮN.
+    lv3: "KHAI TRẬN": Cho 2 đồng minh Olympus ngẫu nhiên +10/+10 và LÁ CHẮN.
+
+CHARON                                                  [Cấp 4]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Chọn 1 đồng minh Olympus — nó giữ lại chỉ số và
+         cường hóa nhận được trong chiến đấu.
+    lv2: "TRIỂN KHAI": Chọn 1 đồng minh Olympus — nó giữ lại gấp đôi
+         chỉ số và cường hóa nhận được trong chiến đấu.
+    lv3: "TRIỂN KHAI": Chọn 2 đồng minh Olympus — chúng giữ lại gấp đôi
+         chỉ số và cường hóa nhận được trong chiến đấu.
+
+PROMETHEUS                                              [Cấp 4]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "TÁI SINH"-"TỬ VONG": Hiệu ứng ĐỐT gây thêm +1 sát thương lượt này.
+    lv2: "TÁI SINH"-"TỬ VONG": Hiệu ứng ĐỐT gây thêm +2 sát thương lượt này.
+    lv3: "TÁI SINH"-"TỬ VONG": Hiệu ứng ĐỐT gây thêm +4 sát thương lượt này.
+
+-------- CẤP 3 ------------------------------------------------
+EVERSPING                                              [Cấp 3]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI" và "KHAI TRẬN": Cho tất cả đồng minh Olympus khác +2/+2
+    lv2: "TRIỂN KHAI" và "KHAI TRẬN": Cho tất cả đồng minh Olympus khác +4/+4
+    lv3: "TRIỂN KHAI" và "KHAI TRẬN": Cho tất cả đồng minh Olympus khác +8/+8
+
+MEDEA                                                  [Cấp 3]
+  Chỉ số :  4/3  →  8/6  →  16/12
+  Kỹ năng:
+    lv1: "KHAI TRẬN": Cho đồng minh Olympus +4 "SÁT THƯƠNG" (+1 "SÁT THƯƠNG" "VĨNH VIỄN" sau khi ngươi sử dụng 3 lá bài)
+    lv2: "KHAI TRẬN": Cho đồng minh Olympus +8 "SÁT THƯƠNG" (+2 "SÁT THƯƠNG" "VĨNH VIỄN" sau khi ngươi sử dụng 3 lá bài)
+    lv3: "KHAI TRẬN": Cho đồng minh Olympus +16 "SÁT THƯƠNG" (+4 "SÁT THƯƠNG" "VĨNH VIỄN" sau khi ngươi sử dụng 3 lá bài)
+
+CRINBROG                                                  [Cấp 3]
+  Chỉ số :  1/3  →  2/6  →  4/12
+  Kỹ năng:
+    lv1: Sau khi một đồng minh mất "LÁ CHẮN", cho đồng minh đó "LÁ CHẮN" và +4 "SÁT THƯƠNG" (Hiệu ứng kích hoạt 1 lần trong chiến đấu)
+    lv2: Sau khi một đồng minh mất "LÁ CHẮN", cho đồng minh đó "LÁ CHẮN" và +8 "SÁT THƯƠNG" (Hiệu ứng kích hoạt 1 lần trong chiến đấu)
+    lv3: Sau khi một đồng minh mất "LÁ CHẮN", cho đồng minh đó "LÁ CHẮN" và +16 "SÁT THƯƠNG" (Hiệu ứng kích hoạt 1 lần trong chiến đấu)
+
+GRAFIGI                                              [Cấp 3]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Hiệu ứng "ĐỐT" của ngươi gây thêm 2 sát thương trong trận này
+    lv2: "TRIỂN KHAI": Hiệu ứng "ĐỐT" của ngươi gây thêm 4 sát thương trong trận này
+    lv3: "TRIỂN KHAI": Hiệu ứng "ĐỐT" của ngươi gây thêm 8 sát thương trong trận này
+
+SCYLLA                                              [Cấp 3]
+  Chỉ số :  4/1  →  8/2  →  16/4
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Nhận 1 "PHÉP THÁNH ĐỀN" ngẫu nhiên từ CẤP 2
+    lv2: "KẾT LIỄU(1)": Nhận 1 "PHÉP THÁNH ĐỀN" ngẫu nhiên từ CẤP 3
+    lv3: "KẾT LIỄU(1)": Nhận 2 "PHÉP THÁNH ĐỀN" ngẫu nhiên từ CẤP 3
+
+HYDRA                                            [Cấp 3]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "TẤN CÔNG" - "PHẢN CÔNG": "ĐỐT(3)" mục tiêu và kẻ địch kế bên nó
+    lv2: "TẤN CÔNG" - "PHẢN CÔNG": "ĐỐT(6)" mục tiêu và kẻ địch kế bên nó
+    lv3: "TẤN CÔNG" - "PHẢN CÔNG": "ĐỐT(9)" mục tiêu và kẻ địch kế bên nó
+
+-------- CẤP 2 ------------------------------------------------
+
+AETOS                                            [Cấp 2]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:
+    lv1: Bất cứ khi nào một đồng minh Olympus tấn công, cho AETOS +2/+1
+    lv2: Bất cứ khi nào một đồng minh Olympus tấn công, cho AETOS +4/+2
+    lv3: Bất cứ khi nào một đồng minh Olympus tấn công, cho AETOS +8/+4
+
+HỌC GIẢ HY LẠP                                            [Cấp 2]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: "THÁNH ĐỀN" sẽ cho 2 "PHÉP THÁNH ĐỀN". "TRIỂN KHAI" và "KẾT LƯỢT": 1 Phép đầu tiên mua sẽ được giảm 1 vàng
+    lv2: "THÁNH ĐỀN" sẽ cho 2 "PHÉP THÁNH ĐỀN". "TRIỂN KHAI" và "KẾT LƯỢT": 2 Phép đầu tiên mua sẽ được giảm 1 vàng
+    lv3: "THÁNH ĐỀN" sẽ cho 2 "PHÉP THÁNH ĐỀN". "TRIỂN KHAI" và "KẾT LƯỢT": 3 Phép đầu tiên mua sẽ được giảm 2 vàng
+
+HERCULES                                            [Cấp 2]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: HERCULES giữ tất cả chỉ số và những cường hóa nhận được trong trận chiến
+    lv2: HERCULES giữ gấp đôi tất cả chỉ số và những cường hóa nhận được trong trận chiến
+    lv3: "LÁ CHẮN" - HERCULES giữ gấp đôi tất cả chỉ số và những cường hóa nhận được trong trận chiến
+
+-------- CẤP 1 ------------------------------------------------
+
+ORTHROS                                            [Cấp 1]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH" - "LÁ CHẮN"
+    lv2: "KHIÊU KHÍCH" - "LÁ CHẮN": Sau khi mất "LÁ CHẮN", nhận +2/+2
+    lv3: "KHIÊU KHÍCH" - "LÁ CHẮN": Sau khi mất "LÁ CHẮN", nhận +4/+4
+
+NAREA                                            [Cấp 1]
+  Chỉ số :  3/2  →  6/4  →  12/8
+  Kỹ năng:
+    lv1: Mỗi 3 lần "KẾT LƯỢT", nhận 1 đơn vị Olympus ngẫu nhiên bằng hoặc nhỏ hơn cấp "THÁNH ĐỀN"
+    lv2: Mỗi 3 lần "KẾT LƯỢT", nhận 2 đơn vị Olympus ngẫu nhiên bằng hoặc nhỏ hơn cấp "THÁNH ĐỀN"
+    lv3: Mỗi 3 lần "KẾT LƯỢT", nhận 3 đơn vị Olympus ngẫu nhiên bằng hoặc nhỏ hơn cấp "THÁNH ĐỀN"
+
+════════════════════════════════════════════════════════════════
+  TỘC: YGGDRASIL
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+SKADI                                                    [Cấp 6]
+  Chỉ số :  9/2  →  18/4  →  36/8
+  Kỹ năng:
+    lv1: "TẦM XA"-"KẾT LIỄU(1)": Cho 1 đồng minh khác +8 "SÁT THƯƠNG" và kích hoạt hiệu ứng "KẾT LIỄU" của đồng minh đó 
+    lv2: "TẦM XA"-"KẾT LIỄU(1)": Cho 2 đồng minh khác +16 "SÁT THƯƠNG" và kích hoạt hiệu ứng "KẾT LIỄU" của đồng minh đó
+    lv3: "TẦM XA"-"KẾT LIỄU(1)": Cho 5 đồng minh khác +24 "SÁT THƯƠNG" và kích hoạt hiệu ứng "KẾT LIỄU" của đồng minh đó
+
+TYR                                            [Cấp 6]
+  Chỉ số :  6/8  →  12/16  →  24/32
+  Kỹ năng:
+    lv1: "TRẢM KÍCH" - Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, TYR và các đồng minh liền kề nhận +1/+1 "VĨNH VIỄN"
+    lv2: "TRẢM KÍCH" - Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, TYR và các đồng minh liền kề nhận +2/+2 "VĨNH VIỄN"
+    lv3: "TRẢM KÍCH" - Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, TYR và các đồng minh liền kề nhận +4/+4 "VĨNH VIỄN"
+
+THOR                                            [Cấp 6]
+  Chỉ số :  8/10  →  16/20  →  32/40
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Gây sát thương thừa lên 1 kẻ địch bên cạnh kẻ địch bị kết liễu
+    lv2: "KẾT LIỄU(1)": Gây sát thương thừa lên 1 kẻ địch liền kề kẻ địch bị kết liễu
+    lv3: "KẾT LIỄU(1)": Gây sát thương thừa lên 2 kẻ địch liền kề kẻ địch bị kết liễu
+
+-------- CẤP 5 -------------------------------------------------
+
+BALDUR                                            [Cấp 5]
+  Chỉ số :  10/10  →  20/20  →  40/40
+  Kỹ năng:
+    lv1: "TẤN CÔNG" và "TỬ VONG": Gây 1 sát thương lên tất cả đồng minh
+    lv2: "TẤN CÔNG" và "TỬ VONG": Gây 1 sát thương lên tất cả đồng minh, 2 lần
+    lv3: "TẤN CÔNG" và "TỬ VONG": Gây 1 sát thương lên tất cả đồng minh, 3 lần
+
+SIF                                            [Cấp 5]
+  Chỉ số :  2/7  →  4/14  →  8/28
+  Kỹ năng:
+    lv1: Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, SIF cho 3 đồng minh ngẫu nhiên YGGDRASIL ngẫu nhiên +1/+1 "VĨNH VIỄN"
+    lv2: Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, SIF cho 3 đồng minh ngẫu nhiên YGGDRASIL ngẫu nhiên +2/+2 "VĨNH VIỄN"
+    lv3: Bất cứ khi nào một đồng minh YGGDRASIL nhận sát thương, SIF cho 6 đồng minh ngẫu nhiên YGGDRASIL ngẫu nhiên +4/+4 "VĨNH VIỄN"
+
+FRIGGA                                            [Cấp 5]
+  Chỉ số :  1/12  →  2/24  →  4/48
+  Kỹ năng:
+    lv1: "LÁ CHẮN" - "KHÔNG THỂ TẤN CÔNG" - "HÀO QUANG": FRIGGA nhận sát thương thay cho đồng minh phía trước (Ngoại trừ FRIGGA)
+    lv2: "LÁ CHẮN" - "KHÔNG THỂ TẤN CÔNG" - "HÀO QUANG": FRIGGA nhận sát thương thay cho đồng minh liền kề (Ngoại trừ FRIGGA)
+    lv3: "LÁ CHẮN" - "KHÔNG THỂ TẤN CÔNG" - "HÀO QUANG": FRIGGA nhận sát thương thay cho tất cả đồng minh (Ngoại trừ FRIGGA)
+
+HEIMDALL                                            [Cấp 5]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào đồng minh kích hoạt "KẾT LIỄU", cho tất cả đồng minh +2/+2 "VĨNH VIỄN"
+    lv2: Bất cứ khi nào đồng minh kích hoạt "KẾT LIỄU", cho tất cả đồng minh +4/+4 "VĨNH VIỄN"
+    lv3: Bất cứ khi nào đồng minh kích hoạt "KẾT LIỄU", cho tất cả đồng minh +8/+8 "VĨNH VIỄN"
+
+-------- CẤP 4 -------------------------------------------------
+
+KẺ CUỒNG NỘ                                            [Cấp 4]
+  Chỉ số :  8/6  →  16/12  →  32/24
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Nhận +3/+3 "VĨNH VIỄN". "KẾT LIỄU(2)": Nhân đôi "SÁT THƯƠNG" và tấn công ngay lập tức
+    lv2: "KẾT LIỄU(1)": Nhận +6/+6 "VĨNH VIỄN". "KẾT LIỄU(2)": Nhân đôi "SÁT THƯƠNG" và tấn công ngay lập tức
+    lv3: "KẾT LIỄU(1)": Nhận +9/+9 "VĨNH VIỄN". "KẾT LIỄU(2)": Nhân đôi "SÁT THƯƠNG" và tấn công ngay lập tức
+
+DRAUGR                                            [Cấp 4]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH"-"TỬ VONG": Cho 1 đồng minh khác YGGDRASIL hiệu ứng "TỬ VONG": Triệu hồi một DRAUGR (Ngoại trừ các DRAUGR khác)
+    lv2: "KHIÊU KHÍCH"-"TỬ VONG": Cho 2 đồng minh khác YGGDRASIL hiệu ứng "TỬ VONG": Triệu hồi một DRAUGR (Ngoại trừ các DRAUGR khác)
+    lv3: "KHIÊU KHÍCH"-"TỬ VONG": Cho 3 đồng minh khác YGGDRASIL hiệu ứng "TỬ VONG": Triệu hồi một DRAUGR (Ngoại trừ các DRAUGR khác)
+
+JOTUNN CÂY                                            [Cấp 4]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: Bất cứ khi nào đồng minh YGGDRASIL nhận sát thương, JOTUNN CÂY nhận +1/+1
+    lv2: Bất cứ khi nào đồng minh YGGDRASIL nhận sát thương, JOTUNN CÂY nhận +2/+2
+    lv3: Bất cứ khi nào đồng minh YGGDRASIL nhận sát thương, JOTUNN CÂY nhận +4/+4
+
+JOTUNN BĂNG                                            [Cấp 4]
+  Chỉ số :  1/8  →  2/16  →  3/32
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH": Bất cứ khi nào JOTUNN BĂNG nhận sát thương, gây 1 sát thương lên mọi đồng minh liền kề (2 lần trong chiến đấu)
+    lv2: "KHIÊU KHÍCH": Bất cứ khi nào JOTUNN BĂNG nhận sát thương, gây 1 sát thương lên mọi đồng minh liền kề (4 lần trong chiến đấu)
+    lv3: "KHIÊU KHÍCH": Bất cứ khi nào JOTUNN BĂNG nhận sát thương, gây 1 sát thương lên mọi đồng minh liền kề, lặp lại 2 lần (4 lần trong chiến đấu)
+
+BRAGI                                            [Cấp 4]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: Sau khi một đồng minh kết liễu kẻ địch, cho tất cả đồng minh trên cùng hàng +3 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv2: Sau khi một đồng minh kết liễu kẻ địch, cho tất cả đồng minh trên cùng hàng +6 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv3: Sau khi một đồng minh kết liễu kẻ địch, cho tất cả đồng minh trên cùng hàng +12 "SÁT THƯƠNG" "VĨNH VIỄN"
+
+-------- CẤP 3 -------------------------------------------------
+
+TIÊN ÁNH SÁNG                                           [Cấp 3]
+  Chỉ số :  0/4  →  0/8  →  0/16
+  Kỹ năng:
+    lv1: "KHÔNG THỂ TẤN CÔNG": Khi một đồng minh tấn công, cho nó +4 máu "VĨNH VIỄN" (2 lần trong chiến đấu)
+    lv2: "KHÔNG THỂ TẤN CÔNG": Khi một đồng minh tấn công, cho nó +8 máu "VĨNH VIỄN" (4 lần trong chiến đấu)
+    lv3: "KHÔNG THỂ TẤN CÔNG": Khi một đồng minh tấn công, cho nó +16 máu "VĨNH VIỄN" (4 lần trong chiến đấu)
+
+KELPIE                                            [Cấp 3]
+  Chỉ số :  2/1  →  4/2  →  8/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Khiến tất cả kẻ địch trong cùng cột "SUY YẾU"
+    lv2: "TỬ VONG": Khiến tất cả kẻ địch trong cùng cột và một cột bên cạnh "SUY YẾU"
+    lv3: "TỬ VONG": Khiến tất cả kẻ địch "SUY YẾU"
+
+VALKYRIE                                            [Cấp 3]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": VALKYRIE ở mọi nơi có +2/+1 trong trận này
+    lv2: "KẾT LIỄU(1)": VALKYRIE ở mọi nơi có +4/+2 trong trận này
+    lv3: "KẾT LIỄU(1)": VALKYRIE ở mọi nơi có +8/+4 trong trận này
+
+TIÊN HẮC ÁM                                            [Cấp 3]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào đồng minh cùng cột tấn công, gây 1 sát thương lên đồng minh đó và cho +4 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv2: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào đồng minh cùng cột tấn công, gây 1 sát thương lên đồng minh đó và cho +8 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv3: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào đồng minh cùng cột tấn công, gây 1 sát thương lên đồng minh đó và cho +16 "SÁT THƯƠNG" "VĨNH VIỄN"
+
+-------- CẤP 2 -------------------------------------------------
+
+YULE LAD                                            [Cấp 2]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 "CON CỪU" lên sân của đối phương, "CON CỪU" nó "KHÔNG THỂ TẤN CÔNG"
+    lv2: "TỬ VONG": Triệu hồi 2 "CON CỪU" lên sân của đối phương, "CON CỪU" nó "KHÔNG THỂ TẤN CÔNG"
+    lv3: "TỬ VONG": Triệu hồi 3 "CON CỪU" lên sân của đối phương, "CON CỪU" nó "KHÔNG THỂ TẤN CÔNG"
+
+HULDRA CHỮA TRỊ                                           [Cấp 2]
+  Chỉ số :  1/4  →  2/8  →  4/16
+  Kỹ năng:
+    lv1: Khi có đồng minh nhận sát thương, cho đồng minh đó +1 "MÁU" (3 lần trong chiến đấu)
+    lv2: Khi có đồng minh nhận sát thương, cho đồng minh đó +2 "MÁU" (3 lần trong chiến đấu)
+    lv3: Khi có đồng minh nhận sát thương, cho đồng minh đó +4 "MÁU" (3 lần trong chiến đấu)
+
+HULDRA THỢ SĂN                                            [Cấp 2]
+  Chỉ số :  4/2  →  8/4  →  16/8
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Cho 1 đồng minh khác +4 "MÁU"
+    lv2: "KẾT LIỄU(1)": Cho 1 đồng minh khác +8 "MÁU"
+    lv3: "KẾT LIỄU(1)": Cho 1 đồng minh khác +16 "MÁU"
+
+QUỶ LÙN                                            [Cấp 2]
+  Chỉ số :  1/4  →  2/8  →  4/16
+  Kỹ năng:
+    lv1: Bất cứ khi nào QUỶ LÙN nhận sát thương, nhận +1 "MÁU" "VĨNH VIỄN" (Đổi "MÁU" và "SÁT THƯƠNG" mỗi lần kích hoạt)
+    lv2: Bất cứ khi nào QUỶ LÙN nhận sát thương, nhận +2 "MÁU" "VĨNH VIỄN" (Đổi "MÁU" và "SÁT THƯƠNG" mỗi lần kích hoạt)
+    lv3: Bất cứ khi nào QUỶ LÙN nhận sát thương, nhận +4 "MÁU" "VĨNH VIỄN" (Đổi "MÁU" và "SÁT THƯƠNG" mỗi lần kích hoạt)
+
+-------- CẤP 1 -------------------------------------------------
+
+VIKING                                            [Cấp 1]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Nhận +1 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv2: "KẾT LIỄU(1)": Nhận +2 "SÁT THƯƠNG" "VĨNH VIỄN"
+    lv3: "KẾT LIỄU(1)": Nhận +4 "SÁT THƯƠNG" "VĨNH VIỄN"
+
+VALAVN                                            [Cấp 1]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Khiến mục tiêu bị "SUY YẾU"
+    lv2: "TẤN CÔNG": Khiến mục tiêu và 1 kẻ địch khác bị "SUY YẾU"
+    lv3: "TẤN CÔNG": Khiến mục tiêu và 2 kẻ địch khác bị "SUY YẾU"
+
+CON CỪU                                            [Cấp 1]
+  Chỉ số :  0/1  →  0/1  →  0/1
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH"
+    lv2: "KHIÊU KHÍCH"
+    lv3: "KHIÊU KHÍCH"
+
+════════════════════════════════════════════════════════════════
+  TỘC: SHENZHOU
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+TIỂU LONG NỮ                                                    [Cấp 6]
+  Chỉ số :  8/8  →  16/16  →  32/32
+  Kỹ năng:
+    lv1: "TẤN CÔNG" - "PHẢN CÔNG": Gây 2 "SÁT THƯƠNG" (cho mỗi viên "TIÊN ĐAN" đơn vị này được nhận) lên mục tiêu (2 lần trong chiến đấu)
+    lv2: "TẤN CÔNG" - "PHẢN CÔNG": Gây 4 "SÁT THƯƠNG" (cho mỗi viên "TIÊN ĐAN" đơn vị này được nhận) lên mục tiêu (4 lần trong chiến đấu)
+    lv3: "TẤN CÔNG" - "PHẢN CÔNG": Gây 8 "SÁT THƯƠNG" (cho mỗi viên "TIÊN ĐAN" đơn vị này được nhận) lên mục tiêu (99 lần trong chiến đấu)
+
+TÔN NGỘ KHÔNG                                            [Cấp 6]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)" Chọn cho một "TÔN NGỘ KHÔNG" trên sân +6/+6 "VĨNH VIỄN" hoặc "XUYÊN KÍCH" hoặc "TRẢM KÍCH" hoặc "LÁ CHẮN" cho đến lượt sau
+    lv2: "LUYỆN ĐAN(2)" Chọn cho một "TÔN NGỘ KHÔNG" trên sân +6/+6 "VĨNH VIỄN" hoặc "XUYÊN KÍCH" hoặc "TRẢM KÍCH" hoặc "LÁ CHẮN" cho đến lượt sau
+    lv3: "LUYỆN ĐAN(3)" Chọn cho một "TÔN NGỘ KHÔNG" trên sân +6/+6 "VĨNH VIỄN" hoặc "XUYÊN KÍCH" hoặc "TRẢM KÍCH" hoặc "LÁ CHẮN" cho đến lượt sau
+
+TRIỆU KHỔNG MINH                                            [Cấp 6]
+  Chỉ số :  9/9  →  18/18  →  36/36
+  Kỹ năng:
+    lv1: "KẾT LƯỢT" - "TIÊN ĐAN" của ngươi cho thêm +1/+1 trong trận này
+    lv2: "KẾT LƯỢT" - "TIÊN ĐAN" của ngươi cho thêm +2/+2 trong trận này
+    lv3: "KẾT LƯỢT" - "TIÊN ĐAN" của ngươi cho thêm +4/+4 trong trận này
+
+-------- CẤP 5 -------------------------------------------------
+
+THÂN CÔNG BÁO                                            [Cấp 5]
+  Chỉ số :  7/7  →  14/14  →  28/28
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)": Cho 1 đơn vị SHENZHOU "TÁI SINH" với toàn bộ "SÁT THƯƠNG" cho đến lượt sau
+    lv2: "LUYỆN ĐAN(2)": Cho 1 đơn vị SHENZHOU "TÁI SINH" với toàn bộ "SÁT THƯƠNG" cho đến lượt sau
+    lv3: "LUYỆN ĐAN(3)": Cho 1 đơn vị SHENZHOU "TÁI SINH" với toàn bộ "SÁT THƯƠNG" cho đến lượt sau
+
+LONG CÁT CÔNG CHÚA                                            [Cấp 5]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", cho 1 đồng minh SHENZHOU khác trên sân cùng loại "TIÊN ĐAN" đó
+    lv2: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", cho 2 đồng minh SHENZHOU khác trên sân cùng loại "TIÊN ĐAN" đó
+    lv3: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", cho 3 đồng minh SHENZHOU khác trên sân cùng loại "TIÊN ĐAN" đó
+
+KHƯƠNG TỬ NHA                                            [Cấp 5]
+  Chỉ số :  4/6  →  8/12  →  16/24
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Kích hoạt hiệu ứng "TRIỂN KHAI" của đồng minh bên phải
+    lv2: "KẾT LƯỢT": Kích hoạt hiệu ứng "TRIỂN KHAI" của những đồng minh bên cạnh
+    lv3: "KẾT LƯỢT": Kích hoạt hiệu ứng "TRIỂN KHAI" của những đồng minh liền kề
+
+HI HÒA                                            [Cấp 5]
+  Chỉ số :  2/6  →  4/12  →  8/24
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)": Nhận 1 lá "LONG LÂN ĐAN"
+    lv2: "LUYỆN ĐAN(2)": Nhận 2 lá "LONG LÂN ĐAN"
+    lv3: "LUYỆN ĐAN(3)": Nhận 3 lá "LONG LÂN ĐAN"
+
+ĐẮC KỶ                                            [Cấp 5]
+  Chỉ số :  6/1  →  12/2  →  24/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Nhận 1 viên "TIÊN ĐAN" ngẫu nhiên, với mỗi đồng minh SHENZHOU trên sân
+    lv2: "TỬ VONG": Nhận 2 viên "TIÊN ĐAN" ngẫu nhiên, với mỗi đồng minh SHENZHOU trên sân
+    lv3: "TỬ VONG": Nhận 4 viên "TIÊN ĐAN" ngẫu nhiên, với mỗi đồng minh SHENZHOU trên sân
+
+-------- CẤP 4 -------------------------------------------------
+
+LÔI CHẤN TỬ                                            [Cấp 4]
+  Chỉ số :  8/3  →  16/6  →  32/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", gây sát thương bằng với số "TIÊN ĐAN" nhận được lên 1 kẻ địch ngẫu nhiên (3 lần trong chiến đấu)
+    lv2: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", gây sát thương bằng với số "TIÊN ĐAN" nhận được lên 1 kẻ địch ngẫu nhiên (6 lần trong chiến đấu)
+    lv3: Bất cứ khi nào đơn vị này nhận "TIÊN ĐAN", gây sát thương bằng với số "TIÊN ĐAN" nhận được lên 1 kẻ địch ngẫu nhiên (9 lần trong chiến đấu)
+
+THẠCH CƠ NƯƠNG NƯƠNG                                            [Cấp 4]
+  Chỉ số :  4/1  →  8/2  →  16/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Nhận 1 viên "TIÊN ĐAN" ngẫu nhiên
+    lv2: "TỬ VONG": Nhận 2 viên "TIÊN ĐAN" ngẫu nhiên
+    lv3: "TỬ VONG": Nhận 4 viên "TIÊN ĐAN" ngẫu nhiên
+
+ZHIJI LING                                            [Cấp 4]
+  Chỉ số :  2/3  →  4/6  →  8/12
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận 1 "TIÊN ĐAN" ngẫu nhiên
+    lv2: "TRIỂN KHAI": Nhận 2 "TIÊN ĐAN" ngẫu nhiên
+    lv3: "TRIỂN KHAI": Nhận 3 "TIÊN ĐAN" ngẫu nhiên
+
+HOÀNG THIÊN HỨA                                           [Cấp 4]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Cho 1 "THÁI CỰC ĐAN" lên những đồng minh cùng hàng
+    lv2: "KẾT LƯỢT": Cho 2 "THÁI CỰC ĐAN" lên những đồng minh cùng hàng
+    lv3: "KẾT LƯỢT": Cho 3 "THÁI CỰC ĐAN" lên những đồng minh cùng hàng
+
+-------- CẤP 3 -------------------------------------------------
+
+THAO THIẾT                                           [Cấp 3]
+  Chỉ số :  5/1  →  10/2  →  20/4
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)" Nhận 1 "TIÊN ĐAN" ngẫu nhiên
+    lv2: "KẾT LIỄU(1)" Nhận 2 "TIÊN ĐAN" ngẫu nhiên
+    lv3: "KẾT LIỄU(1)" Nhận 3 "TIÊN ĐAN" ngẫu nhiên
+
+THỎ NGỌC                                             [Cấp 3]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": "TIÊN ĐAN" tăng "MÁU" sẽ cho thêm +1 "MÁU" trong trận này
+    lv2: "TRIỂN KHAI": "TIÊN ĐAN" tăng "MÁU" sẽ cho thêm +2 "MÁU" trong trận này
+    lv3: "TRIỂN KHAI": "TIÊN ĐAN" tăng "MÁU" sẽ cho thêm +4 "MÁU" trong trận này
+
+HỖN ĐỘN                                             [Cấp 3]
+  Chỉ số :  4/1  →  8/2  →  16/4
+  Kỹ năng:
+    lv1: "TỬ VONG": "TIÊN ĐAN" tăng "SÁT THƯƠNG" sẽ cho thêm +1 "SÁT THƯƠNG" trong trận này
+    lv2: "TỬ VONG": "TIÊN ĐAN" tăng "SÁT THƯƠNG" sẽ cho thêm +2 "SÁT THƯƠNG" trong trận này
+    lv3: "TỬ VONG": "TIÊN ĐAN" tăng "SÁT THƯƠNG" sẽ cho thêm +4 "SÁT THƯƠNG" trong trận này
+
+NIÊN THÚ                                            [Cấp 3]
+  Chỉ số :  3/2  →  6/4  →  12/8
+  Kỹ năng:
+    lv1: "TỬ VONG": Cho 1 "TIÊN ĐAN" từ "CẤP" 1 lên những đồng minh liền kề
+    lv2: "TỬ VONG": Cho 1 "TIÊN ĐAN" từ "CẤP" 2 lên những đồng minh liền kề
+    lv3: "TỬ VONG": Cho 1 "TIÊN ĐAN" từ "CẤP" 2 lên những đồng minh liền kề, 2 lần
+
+-------- CẤP 2 -------------------------------------------------
+
+ĐẠO HẠC                                            [Cấp 2]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)": Nhận 1 lá "THÁI CỰC ĐAN"
+    lv2: "LUYỆN ĐAN(2)": Nhận 2 lá "THÁI CỰC ĐAN"
+    lv3: "LUYỆN ĐAN(3)": Nhận 3 lá "THÁI CỰC ĐAN"
+
+KHỈ NHỎ                                            [Cấp 2]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: Bất cứ khi nào "KHỈ NHỎ" nhận "TIÊN ĐAN", nhận thêm +1/+1, Sau khi nhận 24 "TIÊN ĐAN", biến thành "TÔN NGỘ KHÔNG" lv1 (giữ nguyên chỉ số "SÁT THƯƠNG"/"MÁU" hiện tại)
+    lv2: Bất cứ khi nào "KHỈ NHỎ" nhận "TIÊN ĐAN", nhận thêm +2/+2, Sau khi nhận 24 "TIÊN ĐAN", biến thành "TÔN NGỘ KHÔNG" lv1 (giữ nguyên chỉ số "SÁT THƯƠNG"/"MÁU" hiện tại)
+    lv3: Bất cứ khi nào "KHỈ NHỎ" nhận "TIÊN ĐAN", nhận thêm +4/+4, Sau khi nhận 24 "TIÊN ĐAN", biến thành "TÔN NGỘ KHÔNG" lv1 (giữ nguyên chỉ số "SÁT THƯƠNG"/"MÁU" hiện tại)
+
+THỔ ĐỊA                                             [Cấp 2]
+  Chỉ số :  3/2  →  6/4  →  12/8
+  Kỹ năng:
+    lv1: "HÀO QUANG": Tăng "THU NHẬP" của ngươi thêm 1 (Tăng thêm 1 sau mỗi 3 lượt)
+    lv2: "HÀO QUANG": Tăng "THU NHẬP" của ngươi thêm 2 (Tăng thêm 2 sau mỗi 3 lượt)
+    lv3: "HÀO QUANG": Tăng "THU NHẬP" của ngươi thêm 4 (Tăng thêm 4 sau mỗi 3 lượt)
+
+TỲ BÀ TINH                                             [Cấp 2]
+  Chỉ số :  1/3  →  2/6  →  4/12
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH": Bất cứ khi nào "TỲ BÀ TINH" này nhận sát thương, nhận 1 "TIÊN ĐAN" CẤP 1 (3 lần trong chiến đấu)
+    lv2: "KHIÊU KHÍCH": Bất cứ khi nào "TỲ BÀ TINH" này nhận sát thương, nhận 1 "TIÊN ĐAN" CẤP 2 (3 lần trong chiến đấu)
+    lv3: "KHIÊU KHÍCH": Bất cứ khi nào "TỲ BÀ TINH" này nhận sát thương, nhận 1 "TIÊN ĐAN" CẤP 2 (6 lần trong chiến đấu)
+
+-------- CẤP 1 -------------------------------------------------
+
+SEN HỒNG TỬ                                               [Cấp 1]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận 1 "BỘI LỰC ĐAN" và 1 "DIÊN THỌ ĐAN"
+    lv2: "TRIỂN KHAI": Nhận 2 "THÁI CỰC ĐAN"
+    lv3: "TRIỂN KHAI": Nhận 4 "THÁI CỰC ĐAN"
+
+PHI PHI                                             [Cấp 1]
+  Chỉ số :  3/2  →  6/4  →  12/8
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)" Nhận 1 "DIÊN THỌ ĐAN"
+    lv2: "LUYỆN ĐAN(2)" Nhận 2 "DIÊN THỌ ĐAN"
+    lv3: "LUYỆN ĐAN(3)" Nhận 3 "DIÊN THỌ ĐAN"
+
+BẠCH TRẠCH                                             [Cấp 1]
+  Chỉ số :  2/3  →  4/6  →  8/12
+  Kỹ năng:
+    lv1: "LUYỆN ĐAN(1)" Nhận 1 "BỘI LỰC ĐAN"
+    lv2: "LUYỆN ĐAN(2)" Nhận 2 "BỘI LỰC ĐAN"
+    lv3: "LUYỆN ĐAN(3)" Nhận 3 "BỘI LỰC ĐAN"
+
+-------- VẬT TRIỆU HỒI ---------------------------------------
+
+HẠO THIÊN KHUYỂN                                             [VẬT TRIỆU HỒI]
+  Chỉ số :  7/7  →  14/14  →  28/28
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Cho mỗi đồng minh SHENZHOU (ngoại trừ bản thân) trên sân một "TIÊN ĐAN" ngẫu nhiên (1 lần)
+    lv2: "TRIỂN KHAI": Cho mỗi đồng minh SHENZHOU (ngoại trừ bản thân) trên sân một "TIÊN ĐAN" ngẫu nhiên (2 lần)
+    lv3: "TRIỂN KHAI": Cho mỗi đồng minh SHENZHOU (ngoại trừ bản thân) trên sân một "TIÊN ĐAN" ngẫu nhiên (4 lần)
+════════════════════════════════════════════════════════════════
+  TỘC: BABYLON
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+ERESKIGAL                                             [Cấp 6]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Khi ngươi bán 1 đơn vị BABYLON, "HẤP THỤ" đơn vị đó (2 lần mỗi lượt)
+    lv2: Khi ngươi bán 1 đơn vị BABYLON, "HẤP THỤ" đơn vị đó (4 lần mỗi lượt)
+    lv3: Khi ngươi bán 1 đơn vị BABYLON, "HẤP THỤ" đơn vị đó
+
+NIRURTA                                             [Cấp 6]
+  Chỉ số :  9/9  →  18/18  →  36/36
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai 3 đơn vị, tăng "THU NHẬP" của ngươi thêm 1 cho đến lượt sau
+    lv2: Sau khi ngươi triển khai 3 đơn vị, tăng "THU NHẬP" của ngươi thêm 2 cho đến lượt sau
+    lv3: Sau khi ngươi triển khai 3 đơn vị, tăng "THU NHẬP" của ngươi thêm 4 cho đến lượt sau
+
+UTU                                             [Cấp 6]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai 1 đơn vị BABYLON, cho tất cả đồng minh +1/+1 (Tăng thêm +1/+1 sau khi ngươi triển khai 5 đơn vị BABYLON - Hiệu ứng này có thể cộng dồn)
+    lv2: Sau khi ngươi triển khai 1 đơn vị BABYLON, cho tất cả đồng minh +1/+1 (Tăng thêm +2/+2 sau khi ngươi triển khai 5 đơn vị BABYLON - Hiệu ứng này có thể cộng dồn)
+    lv3: Sau khi ngươi triển khai 1 đơn vị BABYLON, cho tất cả đồng minh +1/+1 (Tăng thêm +4/+4 sau khi ngươi triển khai 5 đơn vị BABYLON - Hiệu ứng này có thể cộng dồn)
+
+-------- CẤP 5 -------------------------------------------------
+
+NANNA                                             [Cấp 5]
+  Chỉ số :  8/8  →  16/16  →  32/32
+  Kỹ năng:
+    lv1: Khi ngươi bán đơn vị này, chuyển chỉ số của nó cho 1 đồng minh BABYLON ngẫu nhiên trên sân
+    lv2: Khi ngươi bán đơn vị này, chuyển chỉ số của nó cho 2 đồng minh BABYLON ngẫu nhiên trên sân
+    lv3: Khi ngươi bán đơn vị này, chuyển chỉ số của nó cho 3 đồng minh BABYLON ngẫu nhiên trên sân
+
+ASHUR                                             [Cấp 5]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi mua một đơn vị, cho tất cả đồng minh trên sân +2 "SÁT THƯƠNG". Bất cứ khi nào ngươi bán một đơn vị, cho tất cả đồng minh trên sân +2 "MÁU"
+    lv2: Bất cứ khi nào ngươi mua một đơn vị, cho tất cả đồng minh trên sân +4 "SÁT THƯƠNG". Bất cứ khi nào ngươi bán một đơn vị, cho tất cả đồng minh trên sân +4 "MÁU"
+    lv3: Bất cứ khi nào ngươi mua một đơn vị, cho tất cả đồng minh trên sân +8 "SÁT THƯƠNG". Bất cứ khi nào ngươi bán một đơn vị, cho tất cả đồng minh trên sân +8 "MÁU"
+
+ENKI                                             [Cấp 5]
+  Chỉ số :  7/7  →  14/14  →  28/28
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho một đồng minh +1/+1 "VĨNH VIỄN". Lặp lại với mỗi đơn vị được triển khai trong lượt này
+    lv2: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho một đồng minh +2/+2 "VĨNH VIỄN". Lặp lại với mỗi đơn vị được triển khai trong lượt này
+    lv3: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho một đồng minh +4/+4 "VĨNH VIỄN". Lặp lại với mỗi đơn vị được triển khai trong lượt này
+
+KI                                             [Cấp 5]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó +3/+3 (tăng thêm +2/+2 cho mỗi đơn vị được triển khai trong lượt này)
+    lv2: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó +3/+3 (tăng thêm +4/+4 cho mỗi đơn vị được triển khai trong lượt này)
+    lv3: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó +3/+3 (tăng thêm +8/+8 cho mỗi đơn vị được triển khai trong lượt này)
+
+-------- CẤP 4 -------------------------------------------------
+
+GUGALANA                                             [Cấp 4]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH": Sau khi ngươi triển khai đơn vị này, tăng chỉ số của nó lên gấp đôi
+    lv2: "KHIÊU KHÍCH" - "LÁ CHẮN": Sau khi ngươi triển khai đơn vị này, tăng chỉ số của nó lên gấp đôi
+    lv3: "KHIÊU KHÍCH" - "LÁ CHẮN": Sau khi ngươi triển khai đơn vị này, tăng chỉ số của nó lên gấp ba 
+
+UMU DRABUTU                                             [Cấp 4]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận 1 đơn vị BABYLON ngẫu nhiên khác (thấp hơn hoặc bằng cấp THÁNH ĐỀN)
+    lv2: "TRIỂN KHAI": Nhận 2 đơn vị BABYLON ngẫu nhiên khác (thấp hơn hoặc bằng cấp THÁNH ĐỀN)
+    lv3: "TRIỂN KHAI": Nhận 3 đơn vị BABYLON ngẫu nhiên khác (thấp hơn hoặc bằng cấp THÁNH ĐỀN) 
+
+ENKIDU                                             [Cấp 4]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai một đơn vị BABYLON, cho đơn vị này và đồng minh bên trái +1/+1
+    lv2: Sau khi ngươi triển khai một đơn vị BABYLON, cho đơn vị này và đồng minh bên trái +2/+2
+    lv3: Sau khi ngươi triển khai một đơn vị BABYLON, cho đơn vị này và đồng minh bên trái +4/+4
+
+GILGAMESH                                             [Cấp 4]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: "LÁ CHẮN" - "LIÊN KÍCH": Bất cứ khi nào đơn vị này được tăng chỉ số, nhận thêm +2/+1 vào chỉ số bản thân
+    lv2: "LÁ CHẮN" - "LIÊN KÍCH": Bất cứ khi nào đơn vị này được tăng chỉ số, nhận thêm +4/+2 vào chỉ số bản thân
+    lv3: "LÁ CHẮN" - "LIÊN KÍCH": Bất cứ khi nào đơn vị này được tăng chỉ số, nhận thêm +8/+4 vào chỉ số bản thân
+
+HUMBABA                                             [Cấp 4]
+  Chỉ số :  7/1  →  14/2  →  28/4
+  Kỹ năng:
+    lv1: "TẦM XA" - "KẾT LIỄU(1)": Nhận 1 đơn vị BABYLON ngẫu nhiên 
+    lv2: "TẦM XA" - "KẾT LIỄU(1)": Nhận 2 đơn vị BABYLON ngẫu nhiên
+    lv3: "TẦM XA" - "KẾT LIỄU(1)": Nhận 3 đơn vị BABYLON ngẫu nhiên
+
+ASAG                                             [Cấp 4]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Chọn tối đa 2 đồng minh BABYLON để "HẤP THỤ"
+    lv2: "TRIỂN KHAI": Chọn tối đa 3 đồng minh BABYLON để "HẤP THỤ"
+    lv3: "TRIỂN KHAI": Chọn tối đa 3 đồng minh BABYLON để "HẤP THỤ" và nhận gấp đôi chỉ số của chúng
+
+-------- CẤP 3 -------------------------------------------------
+
+USUMGALLU                                             [Cấp 3]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Đổi lại "THÁNH ĐỀN" bằng các đơn vị BABYLON và cho chúng +2/+2
+    lv2: "TRIỂN KHAI": Đổi lại "THÁNH ĐỀN" bằng các đơn vị BABYLON và cho chúng +4/+4
+    lv3: "TRIỂN KHAI": Đổi lại "THÁNH ĐỀN" bằng các đơn vị BABYLON và cho chúng +8/+8
+
+LAMASHTU                                             [Cấp 3]
+  Chỉ số :  5/1  →  10/2  →  20/4
+  Kỹ năng:
+    lv1: Khi ngươi bán 1 đơn vị BABYLON, "LAMASHTU" nhận "MÁU" của đơn vị đó (1 lần mỗi lượt)
+    lv2: Khi ngươi bán 1 đơn vị BABYLON, "LAMASHTU" nhận "MÁU" của đơn vị đó (2 lần mỗi lượt)
+    lv3: Khi ngươi bán 1 đơn vị BABYLON, "LAMASHTU" nhận "MÁU" của đơn vị đó (4 lần mỗi lượt)
+
+PAZUZU                                             [Cấp 3]
+  Chỉ số :  5/2  →  10/4  →  20/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận 2 lượt "ĐỔI LẠI" miễn phí
+    lv2: "TRIỂN KHAI": Nhận 4 lượt "ĐỔI LẠI" miễn phí
+    lv3: "TRIỂN KHAI": Nhận 6 lượt "ĐỔI LẠI" miễn phí
+
+KINGU                                             [Cấp 3]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Khi ngươi bán đơn vị này, nhận 1 "PHIẾN ĐÁ SỐ PHẬN"
+    lv2: Khi ngươi bán đơn vị này, nhận 2 "PHIẾN ĐÁ SỐ PHẬN"
+    lv3: Khi ngươi bán đơn vị này, nhận 3 "PHIẾN ĐÁ SỐ PHẬN"
+
+-------- CẤP 2 -------------------------------------------------
+
+CUNG THỦ BABYLON                                             [Cấp 2]
+  Chỉ số :  2/3  →  4/6  →  8/12
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai một đơn vị BABYLON, nhận +1 "SÁT THƯƠNG" và "TẦM XA" cho đến lượt sau
+    lv2: Sau khi ngươi triển khai một đơn vị BABYLON, nhận +2 "SÁT THƯƠNG" và "TẦM XA" cho đến lượt sau
+    lv3: Sau khi ngươi triển khai một đơn vị BABYLON, nhận +4 "SÁT THƯƠNG" và "TẦM XA" cho đến lượt sau
+
+URIDIMMU                                             [Cấp 2]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó và "URIDIMMU" này +1 "SÁT THƯƠNG"
+    lv2: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó và "URIDIMMU" này +2 "SÁT THƯƠNG"
+    lv3: Bất cứ khi nào ngươi triển khai một đơn vị BABYLON, cho đơn vị đó và "URIDIMMU" này +4 "SÁT THƯƠNG"
+
+UGALLU                                             [Cấp 2]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Khi ngươi bán "UGALLU" này, nhận 1 đơn vị BABYLON ngẫu nhiên (Thấp hơn hoặc bằng cấp "THÁNH ĐỀN")
+    lv2: Khi ngươi bán "UGALLU" này, nhận 2 đơn vị BABYLON ngẫu nhiên (Thấp hơn hoặc bằng cấp "THÁNH ĐỀN")
+    lv3: Khi ngươi bán "UGALLU" này, nhận 3 đơn vị BABYLON ngẫu nhiên (Thấp hơn hoặc bằng cấp "THÁNH ĐỀN")
+
+-------- CẤP 1 -------------------------------------------------
+
+HỌC GIẢ SUMER                                             [Cấp 1]
+  Chỉ số :  3/2  →  6/4  →  12/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Giảm giá tiền nâng cấp "THÁNH ĐỀN" đi 1
+    lv2: "TRIỂN KHAI": Giảm giá tiền nâng cấp "THÁNH ĐỀN" đi 2
+    lv3: "TRIỂN KHAI": Giảm giá tiền nâng cấp "THÁNH ĐỀN" đi 4
+
+BINH LÍNH BABYLON                                             [Cấp 1]
+  Chỉ số :  2/4  →  4/8  →  8/16
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai một đơn vị BABYLON, "BINH LÍNH BABYLON" trên sân nhận +1 "MÁU"
+    lv2: Sau khi ngươi triển khai một đơn vị BABYLON, "BINH LÍNH BABYLON" trên sân nhận +2 "MÁU"
+    lv3: Sau khi ngươi triển khai một đơn vị BABYLON, "BINH LÍNH BABYLON" trên sân nhận +4 "MÁU"
+
+KUSARIKKU                                             [Cấp 1]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi bán một đơn vị, "KUSARIKKU" trên sân nhận +1/+1
+    lv2: Bất cứ khi nào ngươi bán một đơn vị, "KUSARIKKU" trên sân nhận +2/+2
+    lv3: Bất cứ khi nào ngươi bán một đơn vị, "KUSARIKKU" trên sân nhận +4/+4
+
+════════════════════════════════════════════════════════════════
+  TỘC: KAMI
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+HACHIMAN                                             [Cấp 6]
+  Chỉ số :  3/9  →  6/18  →  12/36
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Gây 8 sát thương lên mục tiêu, lặp lại X lần (Tăng +1 số lần lặp lại sau khi một đồng minh khác gây sát thương, bắt đầu từ 1)
+    lv2: "TẤN CÔNG": Gây 16 sát thương lên mục tiêu, lặp lại X lần (Tăng +1 số lần lặp lại sau khi một đồng minh khác gây sát thương, bắt đầu từ 1)
+    lv3: "TẤN CÔNG": Gây 32 sát thương lên mục tiêu, lặp lại X lần (Tăng +1 số lần lặp lại sau khi một đồng minh khác gây sát thương, bắt đầu từ 1)
+
+RYUJIN                                             [Cấp 6]
+  Chỉ số :  8/8  →  16/16  →  32/32
+  Kỹ năng:
+    lv1: Bất cứ khi nào một đồng minh KAMI gây sát thương, cho mọi đồng minh +4 "SÁT THƯƠNG" "VĨNH VIỄN" (Đổi "SÁT THƯƠNG"/"Máu" mỗi lần kích hoạt)
+    lv2: Bất cứ khi nào một đồng minh KAMI gây sát thương, cho mọi đồng minh +8 "SÁT THƯƠNG" "VĨNH VIỄN" (Đổi "SÁT THƯƠNG"/"Máu" mỗi lần kích hoạt)
+    lv3: Bất cứ khi nào một đồng minh KAMI gây sát thương, cho mọi đồng minh +16 "SÁT THƯƠNG" "VĨNH VIỄN" (Đổi "SÁT THƯƠNG"/"Máu" mỗi lần kích hoạt)
+
+SUSANOO                                             [Cấp 6]
+  Chỉ số :  9/8  →  18/16  →  36/32
+  Kỹ năng:
+    lv1: "HIỂM ĐỘC"-"KẾT LIỄU(1)": Cho 1 đồng minh KAMI ngẫu nhiên "HIỂM ĐỘC" 
+    lv2: "HIỂM ĐỘC"-"KẾT LIỄU(1)": Cho 2 đồng minh KAMI ngẫu nhiên "HIỂM ĐỘC" 
+    lv3: "HIỂM ĐỘC"-"KẾT LIỄU(1)": Cho 3 đồng minh KAMI ngẫu nhiên "HIỂM ĐỘC" 
+
+-------- CẤP 5 -------------------------------------------------
+
+SARUTAHIKO                                             [Cấp 5]
+  Chỉ số :  5/6  →  10/12  →  20/24
+  Kỹ năng:
+    lv1: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho tất cả đồng minh +1 "SÁT THƯƠNG" "VĨNH VIỄN". Đồng minh có "ẨN THÂN" thì nhận +2/+2
+    lv2: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho tất cả đồng minh +2 "SÁT THƯƠNG" "VĨNH VIỄN". Đồng minh có "ẨN THÂN" thì nhận +4/+4 
+    lv3: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho tất cả đồng minh +4 "SÁT THƯƠNG" "VĨNH VIỄN". Đồng minh có "ẨN THÂN" thì nhận +8/+8 
+
+RAIJIN                                             [Cấp 5]
+  Chỉ số :  8/3  →  16/6  →  32/12
+  Kỹ năng:
+    lv1: "KHÔNG THỂ TẤN CÔNG": Khi đồng minh KAMI tấn công, "RAIJIN" gây sát thương lên mục tiêu bằng với chỉ số "SÁT THƯƠNG" của nó (2 lần trong chiến đấu)
+    lv2: "KHÔNG THỂ TẤN CÔNG": Khi đồng minh KAMI tấn công, "RAIJIN" gây sát thương lên mục tiêu bằng với chỉ số "SÁT THƯƠNG" của nó (4 lần trong chiến đấu) 
+    lv3: "KHÔNG THỂ TẤN CÔNG": Khi đồng minh KAMI tấn công, "RAIJIN" gây sát thương lên mục tiêu bằng với chỉ số "SÁT THƯƠNG" của nó
+
+FUJIN                                             [Cấp 5]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: "KHAI TRẬN": Cho mọi đồng minh KAMI bên cạnh +5/+5 "VĨNH VIỄN" và "LIÊN KÍCH"
+    lv2: "KHAI TRẬN": Cho mọi đồng minh KAMI liền kề +5/+5 "VĨNH VIỄN" và "LIÊN KÍCH" 
+    lv3: "KHAI TRẬN": Cho tất cả đồng minh KAMI +5/+5 "VĨNH VIỄN" và "LIÊN KÍCH"
+
+AME NO UZUME                                             [Cấp 5]
+  Chỉ số :  2/10  →  4/20  →  8/40
+  Kỹ năng:
+    lv1: "ẨN THÂN": Bất cứ khi nào một đồng minh mất "ẨN THÂN", cho tất cả đồng minh khác +2/+1 "VĨNH VIỄN"
+    lv2: "ẨN THÂN": Bất cứ khi nào một đồng minh mất "ẨN THÂN", cho tất cả đồng minh khác +4/+2 "VĨNH VIỄN"
+    lv3: "ẨN THÂN": Bất cứ khi nào một đồng minh mất "ẨN THÂN", cho tất cả đồng minh khác +8/+4 "VĨNH VIỄN"
+
+-------- CẤP 4 -------------------------------------------------
+
+FUTAKUCHI ONNA                                             [Cấp 4]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Nếu đơn vị này đang "ẨN THÂN", gây sát thương bằng với "SÁT THƯƠNG" của "FUTAKUCHI ONNA" lên một kẻ địch bên cạnh mục tiêu
+    lv2: "TẤN CÔNG": Nếu đơn vị này đang "ẨN THÂN", gây sát thương bằng với "SÁT THƯƠNG" của "FUTAKUCHI ONNA" lên mọi kẻ địch bên cạnh mục tiêu
+    lv3: "TẤN CÔNG": Nếu đơn vị này đang "ẨN THÂN", gây sát thương bằng với "SÁT THƯƠNG" của "FUTAKUCHI ONNA" lên mọi kẻ địch liền kề mục tiêu
+
+HANADAKA TENGU                                             [Cấp 4]
+  Chỉ số :  1/6  →  2/12  →  4/24
+  Kỹ năng:
+    lv1: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho một đồng minh khác +2/+2 "VĨNH VIỄN" và "ẨN THÂN"
+    lv2: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho một đồng minh khác +4/+4 "VĨNH VIỄN" và "ẨN THÂN"
+    lv3: "ẨN THÂN": Bất cứ khi nào một đồng minh tấn công, cho một đồng minh khác +8/+8 "VĨNH VIỄN" và "ẨN THÂN"
+
+NEKOMATA                                             [Cấp 4]
+  Chỉ số :  1/9  →  2/18  →  4/36
+  Kỹ năng:
+    lv1: "KHAI TRẬN": Gây 4 sát thương lên kẻ địch đối diện sau đó cho nó "LÁ CHẮN" và "SUY YẾU"
+    lv2: "KHAI TRẬN": Gây 8 sát thương lên kẻ địch đối diện sau đó cho nó "LÁ CHẮN" và "SUY YẾU"
+    lv3: "KHAI TRẬN": Gây 16 sát thương lên kẻ địch đối diện sau đó cho nó "LÁ CHẮN" và "SUY YẾU"
+
+UMIBOZU                                             [Cấp 4]
+  Chỉ số :  7/7  →  14/14  →  28/28
+  Kỹ năng:
+    lv1: "ẨN THÂN"-"KẾT LIỄU(1): Nhận +2/+2 "VĨNH VIỄN" và "ẨN THÂN"
+    lv2: "ẨN THÂN"-"KẾT LIỄU(1): Nhận +4/+4 "VĨNH VIỄN" và "ẨN THÂN"
+    lv3: "ẨN THÂN"-"KẾT LIỄU(1): Nhận +8/+8 "VĨNH VIỄN" và "ẨN THÂN"
+
+ODOKURO                                             [Cấp 4]
+  Chỉ số :  4/6  →  8/12  →  16/24
+  Kỹ năng:
+    lv1: Sau khi một đồng minh KAMI gây sát thương nhận +2/+1 "VĨNH VIỄN"
+    lv2: Sau khi một đồng minh KAMI gây sát thương nhận +4/+2 "VĨNH VIỄN"
+    lv3: Sau khi một đồng minh KAMI gây sát thương nhận +8/+4 "VĨNH VIỄN"
+
+-------- CẤP 3 -------------------------------------------------
+
+NAMAHAGE                                             [Cấp 3]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Sau khi một đồng minh KAMI gây sát thương, cho các đồng minh KAMI khác +1 "SÁT THƯƠNG"
+    lv2: Sau khi một đồng minh KAMI gây sát thương, cho các đồng minh KAMI khác +2 "SÁT THƯƠNG"
+    lv3: Sau khi một đồng minh KAMI gây sát thương, cho các đồng minh KAMI khác +4 "SÁT THƯƠNG"
+
+TANUKI                                             [Cấp 3]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "TÁI SINH"-"LÁ CHẮN": Bất cứ khi nào một đồng minh KAMI khác tấn công, cho tất cả đồng minh đang "ẨN THÂN" +2/+1 "VĨNH VIỄN"
+    lv2: "TÁI SINH"-"LÁ CHẮN": Bất cứ khi nào một đồng minh KAMI khác tấn công, cho tất cả đồng minh đang "ẨN THÂN" +4/+2 "VĨNH VIỄN"
+    lv3: "TÁI SINH"-"LÁ CHẮN": Bất cứ khi nào một đồng minh KAMI khác tấn công, cho tất cả đồng minh đang "ẨN THÂN" +8/+4 "VĨNH VIỄN"
+
+TESSO                                             [Cấp 3]
+  Chỉ số :  6/1  →  12/2  →  24/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Gây 4 sát thương lên kẻ địch có "MÁU" cao nhất
+    lv2: "TỬ VONG": Gây 8 sát thương lên kẻ địch có "MÁU" cao nhất
+    lv3: "TỬ VONG": Gây 16 sát thương lên kẻ địch có "MÁU" cao nhất
+
+YUKI ONNA                                             [Cấp 3]
+  Chỉ số :  1/8  →  2/16  →  4/32
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH": Bất cứ khi nào đơn vị này bị tấn công, gây 4 sát thương lên kẻ tấn công và cho đơn vị này "ẨN THÂN"
+    lv2: "KHIÊU KHÍCH": Bất cứ khi nào đơn vị này bị tấn công, gây 4 sát thương lên kẻ tấn công 2 lần và cho đơn vị này "ẨN THÂN"
+    lv3: "KHIÊU KHÍCH": Bất cứ khi nào đơn vị này bị tấn công, gây 4 sát thương lên kẻ tấn công 3 lần và cho đơn vị này "ẨN THÂN"
+
+JIMENJU                                             [Cấp 3]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Chọn 1 đồng minh KAMI, cho đồng minh đó "ẨN THÂN". Nếu đã có "ẨN THÂN", cho "HIỂM ĐỘC" ("VĨNH VIỄN")
+    lv2: "TRIỂN KHAI": Chọn 2 đồng minh KAMI, cho đồng minh đó "ẨN THÂN". Nếu đã có "ẨN THÂN", cho "HIỂM ĐỘC" ("VĨNH VIỄN")
+    lv3: "TRIỂN KHAI": Chọn 3 đồng minh KAMI, cho đồng minh đó "ẨN THÂN". Nếu đã có "ẨN THÂN", cho "HIỂM ĐỘC" ("VĨNH VIỄN")
+
+KARASU TENGU                                             [Cấp 3]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào một đồng minh KAMI tấn công, gây 2 sát thương lên kẻ địch nhiều "Máu" nhất
+    lv2: Bất cứ khi nào một đồng minh KAMI tấn công, gây 2 sát thương lên kẻ địch nhiều "Máu" nhất, 2 lần
+    lv3: Bất cứ khi nào một đồng minh KAMI tấn công, gây 4 sát thương lên kẻ địch nhiều "Máu" nhất, 3 lần
+
+-------- CẤP 2 -------------------------------------------------
+
+NURIKABE                                             [Cấp 2]
+  Chỉ số :  3/6  →  6/12  →  12/24
+  Kỹ năng:
+    lv1: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào "NURIKABE" này bị tấn công, cho một đồng minh khác +1 "SÁT THƯƠNG" và "ẨN THÂN"
+    lv2: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào "NURIKABE" này bị tấn công, cho một đồng minh khác +2 "SÁT THƯƠNG" và "ẨN THÂN"
+    lv3: "KHÔNG THỂ TẤN CÔNG": Bất cứ khi nào "NURIKABE" này bị tấn công, cho một đồng minh khác +3 "SÁT THƯƠNG" và "ẨN THÂN"
+
+WAYUDO                                             [Cấp 2]
+  Chỉ số :  3/6  →  6/12  →  12/24
+  Kỹ năng:
+    lv1: "TỬ VONG": Gây 1 sát thương và "ĐỐT(4)" tất cả kẻ địch cùng cột với "WAYUDO" này
+    lv2: "TỬ VONG": Gây 2 sát thương và "ĐỐT(4)" tất cả kẻ địch cùng cột với "WAYUDO" này
+    lv3: "TỬ VONG": Gây 4 sát thương và "ĐỐT(4)" tất cả kẻ địch cùng cột với "WAYUDO" này
+
+HITOSUME KOZO                                             [Cấp 2]
+  Chỉ số :  4/1  →  8/2  →  16/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Cho mọi đồng minh KAMI "ẨN THÂN" và +1 "SÁT THƯƠNG""VĨNH VIỄN"
+    lv2: "TỬ VONG": Cho mọi đồng minh KAMI "ẨN THÂN" và +2 "SÁT THƯƠNG""VĨNH VIỄN"
+    lv3: "TỬ VONG": Cho mọi đồng minh KAMI "ẨN THÂN" và +4 "SÁT THƯƠNG""VĨNH VIỄN"
+
+ZAKISHI WARASHI                                             [Cấp 2]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: Bất cứ khi nào đồng minh KAMI mất "ẨN THÂN", nhận 1 Vàng vào lượt sau (2 lần trong chiến đấu)
+    lv2: Bất cứ khi nào đồng minh KAMI mất "ẨN THÂN", nhận 1 Vàng vào lượt sau (4 lần trong chiến đấu)
+    lv3: Bất cứ khi nào đồng minh KAMI mất "ẨN THÂN", nhận 1 Vàng vào lượt sau (99 lần trong chiến đấu)
+
+-------- CẤP 1 -------------------------------------------------
+
+CHOCHIN-OBAKE                                             [Cấp 1]
+  Chỉ số :  2/3  →  4/6  →  8/12
+  Kỹ năng:
+    lv1: "ẨN THÂN": Sau khi "CHOCHIN-OBAKE" này mất "ẨN THÂN", nhận +1 "SÁT THƯƠNG""VĨNH VIỄN"
+    lv2: "ẨN THÂN": Sau khi "CHOCHIN-OBAKE" này mất "ẨN THÂN", nhận +2 "SÁT THƯƠNG""VĨNH VIỄN"
+    lv3: "ẨN THÂN": Sau khi "CHOCHIN-OBAKE" này mất "ẨN THÂN", nhận +4 "SÁT THƯƠNG""VĨNH VIỄN"
+
+KARA-KASA-OBAKE                                             [Cấp 1]
+  Chỉ số :  1/3  →  2/6  →  4/12
+  Kỹ năng:
+    lv1: "TẤN CÔNG": Gây 2 sát thương lên mục tiêu (Luôn gây cho kẻ địch 2 sát thương trước khi tấn công hoặc bị tấn công)
+    lv2: "TẤN CÔNG": Gây 4 sát thương lên mục tiêu (Luôn gây cho kẻ địch 4 sát thương trước khi tấn công hoặc bị tấn công)
+    lv3: "TẤN CÔNG": Gây 8 sát thương lên mục tiêu (Luôn gây cho kẻ địch 8 sát thương trước khi tấn công hoặc bị tấn công)
+
+════════════════════════════════════════════════════════════════
+  TỘC: DAEHAN
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+YEOMRA                                             [Cấp 6]
+  Chỉ số :  7/4  →  14/8  →  28/16
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 "VONG HỒN" với chỉ số bằng với một đơn vị ngẫu nhiên trong tay
+    lv2: "TỬ VONG": Triệu hồi 2 "VONG HỒN" với chỉ số bằng với một đơn vị ngẫu nhiên trong tay
+    lv3: "TỬ VONG": Triệu hồi 2 "VONG HỒN" với chỉ số gấp đôi  một đơn vị ngẫu nhiên trong tay
+
+CHEONJIWANG                                             [Cấp 6]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Mỗi đồng minh DAEHAN "HẤP THỤ" một đơn vị trong "THÁNH ĐỀN", sau đó "ĐỔI LẠI"
+    lv2: "KẾT LƯỢT": Mỗi đồng minh DAEHAN "HẤP THỤ" một đơn vị trong "THÁNH ĐỀN", sau đó "ĐỔI LẠI", lặp lại 2 lần
+    lv3: "KẾT LƯỢT": Mỗi đồng minh DAEHAN "HẤP THỤ" một đơn vị trong "THÁNH ĐỀN", sau đó "ĐỔI LẠI", lặp lại 3 lần
+
+BARI GONGJU                                             [Cấp 6]
+  Chỉ số :  9/1  →  18/2  →  36/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Nhận +4 "SÁT THƯƠNG" "VĨNH VIỄN" sau đó đưa chỉ số "SÁT THƯƠNG" của "BARI GONGJU" cho 1 đơn vị ngẫu nhiên trong tay cho đến lượt sau
+    lv2: "TỬ VONG": Nhận +8 "SÁT THƯƠNG" "VĨNH VIỄN" sau đó đưa chỉ số "SÁT THƯƠNG" của "BARI GONGJU" cho 2 đơn vị ngẫu nhiên trong tay cho đến lượt sau
+    lv3: "TỬ VONG": Nhận +16 "SÁT THƯƠNG" "VĨNH VIỄN" sau đó đưa chỉ số "SÁT THƯƠNG" của "BARI GONGJU" cho 8 đơn vị ngẫu nhiên trong tay cho đến lượt sau
+
+-------- CẤP 5 -------------------------------------------------
+
+JACHEONGBI                                             [Cấp 5]
+  Chỉ số :  7/7  →  14/14  →  28/28
+  Kỹ năng:
+    lv1: Sau khi 6 đơn vị được "Hấp thụ" từ "THÁNH ĐỀN", nhận 1 đơn vị DAEHAN ngẫu nhiên lên đến CẤP 2
+    lv2: Sau khi 6 đơn vị được "Hấp thụ" từ "THÁNH ĐỀN", nhận 1 đơn vị DAEHAN ngẫu nhiên lên đến CẤP 3
+    lv3: Sau khi 6 đơn vị được "Hấp thụ" từ "THÁNH ĐỀN", nhận 2 đơn vị DAEHAN ngẫu nhiên lên đến CẤP 4
+
+SONNIMNE                                             [Cấp 5]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: Khi ngươi bán "SONNIMNE" này, cho các đơn vị trong "THÁNH ĐỀN" trận này +1/+1 sau đó một đơn vị trong "THÁNH ĐỀN" hiệu ứng của "SONNIMNE"
+    lv2: Khi ngươi bán "SONNIMNE" này, cho các đơn vị trong "THÁNH ĐỀN" trận này +2/+2 sau đó một đơn vị trong "THÁNH ĐỀN" hiệu ứng của "SONNIMNE"
+    lv3: Khi ngươi bán "SONNIMNE" này, cho các đơn vị trong "THÁNH ĐỀN" trận này +4/+4 sau đó một đơn vị trong "THÁNH ĐỀN" hiệu ứng của "SONNIMNE"
+
+DAISUNI                                             [Cấp 5]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai một đơn vị CẤP lẻ, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv2: Sau khi ngươi triển khai một đơn vị CẤP lẻ, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN" để nhận "Máu" và gấp đôi "SÁT THƯƠNG" của đơn vị hấp thụ
+    lv3: Sau khi ngươi triển khai một đơn vị CẤP lẻ, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN" để nhận gấp đôi chỉ số của đơn vị hấp thụ
+
+HAESUNI                                             [Cấp 5]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: Sau khi ngươi triển khai một đơn vị CẤP chẵn, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv2: Sau khi ngươi triển khai một đơn vị CẤP chẵn, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN" để nhận "Máu" và gấp đôi "SÁT THƯƠNG" của đơn vị hấp thụ
+    lv3: Sau khi ngươi triển khai một đơn vị CẤP chẵn, "HẤP THỤ" một đơn vị ngẫu nhiên trong "THÁNH ĐỀN" để nhận gấp đôi chỉ số của đơn vị hấp thụ
+
+-------- CẤP 4 -------------------------------------------------
+
+IMUGI                                             [Cấp 4]
+  Chỉ số :  7/6  →  14/12  →  28/24
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Một đơn vị DAEHAN trong tay "HẤP THỤ" 1 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv2: "KẾT LƯỢT": Một đơn vị DAEHAN trong tay "HẤP THỤ" 2 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv3: "KẾT LƯỢT": Một đơn vị DAEHAN trong tay "HẤP THỤ" 3 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+
+YEONGDEUNG HALMANG                                             [Cấp 4]
+  Chỉ số :  8/3  →  16/6  →  32/9
+  Kỹ năng:
+    lv1: Sau khi ngươi "ĐỔI LẠI" 3 lần, nhận 1 đơn vị ngẫu nhiên từ "THÁNH ĐỀN" (3 lần mỗi lượt)
+    lv2: Sau khi ngươi "ĐỔI LẠI" 3 lần, nhận 1 đơn vị ngẫu nhiên từ "THÁNH ĐỀN" (6 lần mỗi lượt)
+    lv3: Sau khi ngươi "ĐỔI LẠI" 3 lần, nhận 1 đơn vị ngẫu nhiên từ "THÁNH ĐỀN" (9 lần mỗi lượt)
+
+JOWANGSIN                                             [Cấp 4]
+  Chỉ số :  6/4  →  12/8  →  24/16
+  Kỹ năng:
+    lv1: Bất cứ khi nào ngươi triển khai một đơn vị CẤP chắn, cho tất cả đơn vị trong "THÁNH ĐỀN" +2 "SÁT THƯƠNG" cho đến lượt sau. Nếu nó là CẤP lẻ cho +2 "MÁU" cho đến lượt sau.
+    lv2: Bất cứ khi nào ngươi triển khai một đơn vị CẤP chắn, cho tất cả đơn vị trong "THÁNH ĐỀN" +4 "SÁT THƯƠNG" cho đến lượt sau. Nếu nó là CẤP lẻ cho +4 "MÁU" cho đến lượt sau.
+    lv3: Bất cứ khi nào ngươi triển khai một đơn vị CẤP chắn, cho tất cả đơn vị trong "THÁNH ĐỀN" +8 "SÁT THƯƠNG" cho đến lượt sau. Nếu nó là CẤP lẻ cho +8 "MÁU" cho đến lượt sau.
+
+SANSIN                                             [Cấp 4]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: Khi "SANSIN" ở trong tay, bất cứ khi nào một thẻ bài (đơn vị, phép, tiên đan) được thêm vào tay, nhận +3/+3
+    lv2: Khi "SANSIN" ở trong tay, bất cứ khi nào một thẻ bài (đơn vị, phép, tiên đan) được thêm vào tay, nhận +6/+6
+    lv3: Khi "SANSIN" ở trong tay, bất cứ khi nào một thẻ bài (đơn vị, phép, tiên đan) được thêm vào tay, nhận +12/+12
+
+-------- CẤP 3 -------------------------------------------------
+
+ĐẠO SĨ                                             [Cấp 3]
+  Chỉ số :  5/5  →  10/10  →  20/20
+  Kỹ năng:
+    lv1: "TẦM XA"-"KẾT LIỄU(1)": Cho các đơn vị trong "THÁNH ĐỀN" +1 "SÁT THƯƠNG" trong trận này 
+    lv2: "TẦM XA"-"KẾT LIỄU(1)": Cho các đơn vị trong "THÁNH ĐỀN" +2 "SÁT THƯƠNG" trong trận này 
+    lv3: "TẦM XA"-"KẾT LIỄU(1)": Cho các đơn vị trong "THÁNH ĐỀN" +4 "SÁT THƯƠNG" trong trận này 
+
+BULGASARI                                             [Cấp 3]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": "HẤP THỤ" 1 đơn vị ngẫu nhiên trong "THÁNH ĐỀN" hiện tại 
+    lv2: "KẾT LƯỢT": "HẤP THỤ" 2 đơn vị ngẫu nhiên trong "THÁNH ĐỀN" hiện tại  
+    lv3: "KẾT LƯỢT": "HẤP THỤ" 3 đơn vị ngẫu nhiên trong "THÁNH ĐỀN" hiện tại 
+
+DOKKAEBI                                             [Cấp 3]
+  Chỉ số :  4/4  →  8/8  →  16/16
+  Kỹ năng:
+    lv1: Khi ngươi bán "DOKKAEBI" này, nhận 1 đơn vị ngẫu nhiên từ CẤP 3 hoặc thấp hơn từ "THÁNH ĐỀN" hiện tại
+    lv2: Khi ngươi bán "DOKKAEBI" này, nhận 2 đơn vị ngẫu nhiên từ CẤP 3 hoặc thấp hơn từ "THÁNH ĐỀN" hiện tại  
+    lv3: Khi ngươi bán "DOKKAEBI" này, nhận 3 đơn vị ngẫu nhiên từ CẤP 3 hoặc thấp hơn từ "THÁNH ĐỀN" hiện tại
+
+INMYEONJO                                             [Cấp 3]
+  Chỉ số :  5/2  →  10/4  →  20/8
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Cho một đơn vị ngẫu nhiên trong tay +5/+5
+    lv2: "KẾT LƯỢT": Cho một đơn vị ngẫu nhiên trong tay +10/+10 
+    lv3: "KẾT LƯỢT": Cho một đơn vị ngẫu nhiên trong tay +15/+15
+
+MUNSIN                                             [Cấp 3]
+  Chỉ số :  5/1  →  10/2  →  20/4
+  Kỹ năng:
+    lv1: "TỬ VONG": Triệu hồi 1 đơn vị có chỉ số cao nhất từ tay
+    lv2: "TỬ VONG": Triệu hồi 2 đơn vị có chỉ số cao nhất từ tay 
+    lv3: "TỬ VONG": Triệu hồi 3 đơn vị có chỉ số cao nhất từ tay
+
+-------- CẤP 2 -------------------------------------------------
+
+NHÂN SÂM TRẺ                                             [Cấp 2]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: Khi bán "NHÂN SÂM TRẺ", nhận một "NHÂN SÂM GIÀ" lv1
+    lv2: Khi bán "NHÂN SÂM TRẺ", nhận một "NHÂN SÂM GIÀ" lv2
+    lv3: Khi bán "NHÂN SÂM TRẺ", nhận một "NHÂN SÂM GIÀ" lv3
+
+GUMIHO                                             [Cấp 2]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Chọn 1 đơn vị DAEHAN, đơn vị đó "HẤP THỤ" 1 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv2: "TRIỂN KHAI": Chọn 1 đơn vị DAEHAN, đơn vị đó "HẤP THỤ" 2 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv3: "TRIỂN KHAI": Chọn 1 đơn vị DAEHAN, đơn vị đó "HẤP THỤ" 3 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+
+HORANGI                                             [Cấp 2]
+  Chỉ số :  4/3  →  8/6  →  16/12
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Cho đơn vị trong "THÁNH ĐỀN" +1/+1 trong trận này
+    lv2: "TRIỂN KHAI": Cho đơn vị trong "THÁNH ĐỀN" +2/+2 trong trận này
+    lv3: "TRIỂN KHAI": Cho đơn vị trong "THÁNH ĐỀN" +4/+4 trong trận này
+
+SAMJOKO                                             [Cấp 2]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Bất cứ khi nào một đồng minh DAEHAN được triệu hồi trong chiến đấu, cho một đơn vị ngẫu nhiên trong tay +1/+1
+    lv2: Bất cứ khi nào một đồng minh DAEHAN được triệu hồi trong chiến đấu, cho một đơn vị ngẫu nhiên trong tay +2/+2
+    lv3: Bất cứ khi nào một đồng minh DAEHAN được triệu hồi trong chiến đấu, cho một đơn vị ngẫu nhiên trong tay +4/+4
+
+-------- CẤP 1 -------------------------------------------------
+
+BULGAE                                             [Cấp 1]
+  Chỉ số :  4/3  →  8/6  →  16/12
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": "HẤP THỤ" 1 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv2: "TRIỂN KHAI": "HẤP THỤ" 2 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+    lv3: "TRIỂN KHAI": "HẤP THỤ" 3 đơn vị ngẫu nhiên trong "THÁNH ĐỀN"
+
+CHOLLIMA                                             [Cấp 1]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: Khi có chỗ trống trên sân và "CHOLLIMA" ở trong tay, triệu hồi "CHOLLIMA"
+    lv2: Khi có chỗ trống trên sân và "CHOLLIMA" ở trong tay, triệu hồi "CHOLLIMA" và x2 "SÁT THƯƠNG"
+    lv3: Khi có chỗ trống trên sân và "CHOLLIMA" ở trong tay, triệu hồi "CHOLLIMA" và x2 chỉ số
+
+-------- VẬT TRIỆU HỒI -----------------------------------------
+
+VONG HỒN                                             [VẬT TRIỆU HỒI]
+  Chỉ số :  1/1 (bị ghi đè bởi hiệu ứng của "YEOMRA")
+  Kỹ năng:
+    lv1: Không có
+    lv2: Không có
+    lv3: Không có
+
+NHÂN SÂM GIÀ                                             [VẬT TRIỆU HỒI]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Cho các đơn vị trong "THÁNH ĐỀN" trận này chỉ số bằng với số vòng mà "NHÂN SÂM TRẺ" đã ở trên sân
+    lv2: "TRIỂN KHAI": Cho các đơn vị trong "THÁNH ĐỀN" trận này chỉ số gấp đôi số vòng mà "NHÂN SÂM TRẺ" đã ở trên sân
+    lv3: "TRIỂN KHAI": Cho các đơn vị trong "THÁNH ĐỀN" trận này chỉ số gấp ba số vòng mà "NHÂN SÂM TRẺ" đã ở trên sân
+
+════════════════════════════════════════════════════════════════
+  TỘC: NEUTRAL
+════════════════════════════════════════════════════════════════
+
+-------- CẤP 6 -------------------------------------------------
+
+HARMONIA                                             [Cấp 6]
+  Chỉ số :  5/7  →  10/14  →  20/28
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Cho mọi đồng minh +2/+2, lặp lại cho mỗi TỘC khác nhau trên sân
+    lv2: "KẾT LƯỢT": Cho mọi đồng minh +4/+4, lặp lại cho mỗi TỘC khác nhau trên sân
+    lv3: "KẾT LƯỢT": Cho mọi đồng minh +8/+8, lặp lại cho mỗi TỘC khác nhau trên sân
+
+-------- CẤP 5 -------------------------------------------------
+
+AGONISTA                                             [Cấp 5]
+  Chỉ số :  6/6  →  12/12  →  24/24
+  Kỹ năng:
+    lv1: "HÀO QUANG": Hiệu ứng "TRIỂN KHAI" của đồng minh kích hoạt 2 lần
+    lv2: "HÀO QUANG": Hiệu ứng "TRIỂN KHAI" của đồng minh kích hoạt 3 lần
+    lv3: "HÀO QUANG": Hiệu ứng "TRIỂN KHAI" của đồng minh kích hoạt 4 lần
+
+MORTISSA                                             [Cấp 5]
+  Chỉ số :  6/2  →  12/4  →  24/8
+  Kỹ năng:
+    lv1: "HÀO QUANG": Hiệu ứng "TỬ VONG" của đồng minh kích hoạt thêm 1 lần
+    lv2: "HÀO QUANG": Hiệu ứng "TỬ VONG" của đồng minh kích hoạt thêm 2 lần
+    lv3: "HÀO QUANG": Hiệu ứng "TỬ VONG" của đồng minh kích hoạt thêm 3 lần
+
+QUETZ                                             [Cấp 5]
+  Chỉ số :  6/2  →  12/4  →  24/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": "TRIỆU TẬP" một "PHÉP THÁNH ĐỀN"
+    lv2: "TRIỂN KHAI": "TRIỆU TẬP" một "PHÉP THÁNH ĐỀN", 2 lần
+    lv3: "TRIỂN KHAI": "TRIỆU TẬP" một "PHÉP THÁNH ĐỀN", 3 lần
+
+AVIDARA                                             [Cấp 5]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: "HÀO QUANG": Hiệu ứng "KẾT LƯỢT" của đồng minh kích hoạt 2 lần
+    lv2: "HÀO QUANG": Hiệu ứng "KẾT LƯỢT" của đồng minh kích hoạt 3 lần
+    lv3: "HÀO QUANG": Hiệu ứng "KẾT LƯỢT" của đồng minh kích hoạt 4 lần
+
+INFESTA                                             [Cấp 5]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: "TỬ VONG": Hủy diệt kẻ địch kết liễu "INFESTA"
+    lv2: "TỬ VONG": Hủy diệt kẻ địch kết liễu "INFESTA" và gây 20 sát thương lên 1 kẻ địch ngẫu nhiên
+    lv3: "TỬ VONG": Hủy diệt kẻ địch kết liễu "INFESTA" và gây 20 sát thương lên 2 kẻ địch ngẫu nhiên
+
+CHALCHIU                                             [Cấp 5]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Cho một đồng minh từ mỗi TỘC +3/+3
+    lv2: "KẾT LƯỢT": Cho một đồng minh từ mỗi TỘC +6/+6
+    lv3: "KẾT LƯỢT": Cho một đồng minh từ mỗi TỘC +12/+12
+
+THỔ DÂN MAN RỢ                                             [Cấp 5]
+  Chỉ số :  7/9  →  14/18  →  28/36
+  Kỹ năng:
+    lv1: "LIÊN KÍCH"-"TẤN CÔNG": Loại bỏ "KHIÊU KHÍCH", "TÁI SINH" và "HIỂM ĐỘC" ra khỏi mục tiêu
+    lv2: "LIÊN KÍCH"-"TẤN CÔNG": Loại bỏ "KHIÊU KHÍCH", "TÁI SINH", "HIỂM ĐỘC" và "LÁ CHẮN" ra khỏi mục tiêu
+    lv3: "LIÊN KÍCH"-"TẤN CÔNG": Loại bỏ "KHIÊU KHÍCH", "TÁI SINH", "HIỂM ĐỘC", "LÁ CHẮN", "TRẢM KÍCH", "XUYÊN KÍCH" ra khỏi mục tiêu
+
+-------- CẤP 4 -------------------------------------------------
+
+AZALEA                                             [Cấp 4]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Cho mọi đồng minh trên sân +2/+2
+    lv2: "TRIỂN KHAI": Cho mọi đồng minh trên sân +4/+4
+    lv3: "TRIỂN KHAI": Cho mọi đồng minh trên sân +8/+8
+
+SALAMVAFER                                             [Cấp 4]
+  Chỉ số :  4/5 →  8/10  →  16/20
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Cho mọi đồng minh +2 "MÁU" (Đổi lại "SÁT THƯƠNG"/"MÁU" mỗi lượt)
+    lv2: "KẾT LƯỢT": Cho mọi đồng minh +3 "MÁU" (Đổi lại "SÁT THƯƠNG"/"MÁU" mỗi lượt)
+    lv3: "KẾT LƯỢT": Cho mọi đồng minh +6 "MÁU" (Đổi lại "SÁT THƯƠNG"/"MÁU" mỗi lượt)
+
+SPORA  [ĐỔI TÊN - trước là INFESTA trùng tên]        [Cấp 4]
+  Chỉ số :  4/2  →  8/4  →  16/8
+  Kỹ năng:
+    lv1: "TỬ VONG": Cho mọi đồng minh +2 "MÁU" và "LÁ CHẮN"
+    lv2: "TỬ VONG": Cho mọi đồng minh +4 "MÁU" và "LÁ CHẮN"
+    lv3: "TỬ VONG": Cho mọi đồng minh +8 "MÁU" và "LÁ CHẮN"
+
+-------- CẤP 3 -------------------------------------------------
+
+SORELL                                             [Cấp 3]
+  Chỉ số :  3/3  →  6/6  →  12/12
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Nhận một "PHÉP THÁNH ĐỀN" CẤP 2
+    lv2: "TRIỂN KHAI": Nhận một "PHÉP THÁNH ĐỀN" CẤP 3
+    lv3: "TRIỂN KHAI": Nhận một "PHÉP THÁNH ĐỀN" CẤP 6
+
+HỘ VỆ THỔ DÂN                                             [Cấp 3]
+  Chỉ số :  1/6  →  2/12  →  4/24
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH": Bất cứ khi nào "HỘ VỆ THỔ DÂN" bị tấn công, cho một đơn vị từ mỗi TỘC +1/+1 "VĨNH VIỄN"
+    lv2: "KHIÊU KHÍCH": Bất cứ khi nào "HỘ VỆ THỔ DÂN" bị tấn công, cho một đơn vị từ mỗi TỘC +2/+2 "VĨNH VIỄN"
+    lv3: "KHIÊU KHÍCH": Bất cứ khi nào "HỘ VỆ THỔ DÂN" bị tấn công, cho một đơn vị từ mỗi TỘC +4/+4 "VĨNH VIỄN"
+
+THỢ SĂN HUNG TÀN                                             [Cấp 3]
+  Chỉ số :  3/1  →  6/2  →  12/4
+  Kỹ năng:
+    lv1: "KẾT LIỄU(1)": Nhận 1 Vàng vào lượt sau
+    lv2: "KẾT LIỄU(1)": Nhận 2 Vàng vào lượt sau
+    lv3: "KẾT LIỄU(1)": Nhận 4 Vàng vào lượt sau
+
+-------- CẤP 2 -------------------------------------------------
+
+TRINH SÁT THỔ DÂN                                             [Cấp 2]
+  Chỉ số :  1/1  →  2/2  →  4/4
+  Kỹ năng:
+    lv1: Khi ngươi bán "TRINH SÁT THỔ DÂN" "TRIỆU TẬP" 1 đơn vị CẤP 1 (CẤP của đơn vị được "TRIỆU TẬP" tăng thêm 1 sau mỗi vòng "TRINH SÁT THỔ DÂN" ở trên sân)
+    lv2: Khi ngươi bán "TRINH SÁT THỔ DÂN" "TRIỆU TẬP" 1 đơn vị CẤP 3 (CẤP của đơn vị được "TRIỆU TẬP" tăng thêm 1 sau mỗi vòng "TRINH SÁT THỔ DÂN" ở trên sân)
+    lv3: Khi ngươi bán "TRINH SÁT THỔ DÂN" "TRIỆU TẬP" 1 đơn vị CẤP 6
+
+ROSETTE                                             [Cấp 2]
+  Chỉ số :  2/2  →  4/4  →  8/8
+  Kỹ năng:
+    lv1: "TRIỂN KHAI": Cho 2 đồng minh +2 "MÁU" và "KHIÊU KHÍCH"
+    lv2: "TRIỂN KHAI": Cho 2 đồng minh +4 "MÁU" và "KHIÊU KHÍCH"
+    lv3: "TRIỂN KHAI": Cho 2 đồng minh +8 "MÁU" và "KHIÊU KHÍCH"
+
+EITRI                                             [Cấp 2]
+  Chỉ số :  1/5  →  2/10  →  4/20
+  Kỹ năng:
+    lv1: "KẾT LƯỢT": Nhận 1 "KIẾM ĐÃ MÀI" hoặc 1 "GIÁP ĐÃ ĐỘN"
+    lv2: "KẾT LƯỢT": Nhận 1 "BINH KHÍ HOÀNG GIA"
+    lv3: "KẾT LƯỢT": Nhận 1 "LƯƠNG NGÂN BINH KHÍ"
+
+================================================================
+V. PHÉP THÁNH ĐỀN
+================================================================
+
+-------- CẤP 6 -------------------------------------------------
+
+TRIỆU TẬP CHUẨN XÁC: Chọn một đơn vị, "TRIỆU TẬP" một đơn vị cũng CẤP
+
+PHẤT CỜ HIỆU TRIỆU: Cho tất cả đồng minh +6/+6
+
+DÂNG HỒN: Chọn 1 đơn vị. "ĐỔI LẠI" toàn bộ "THÁNH ĐỀN" bằng những đơn vị cùng TỘC với đơn vị đã chọn
+
+ĐỀN PHÉP: "ĐỔI LẠI" toàn bộ "THÁNH ĐỀN" thành "PHÉP THÁNH ĐỀN"
+
+KHAI SÁNG: Biến chỉ số của 1 đơn vị thành 20/20
+
+THÁNH KIẾM CỦA KẺ ĐƯỢC CHỌN: Thăng cấp một đơn vị lv1 từ CẤP 4 trở xuống
+
+-------- CẤP 5 -------------------------------------------------
+
+VIỆN TRỢ VÔ DANH: Nếu ngươi thua lượt trước, nhận 4 Vàng
+
+LƯƠNG NGÂN BINH KHÍ: Cho 1 đơn vị +8/+8 nhân với lv của nó
+
+HỘI HỌP QUÂN ĐOÀN: Chọn một: Nhận 2 đơn vị ngẫu nhiên CẤP 3, CẤP 4 hoặc CẤP 5
+
+LỜI NGUYỀN CHIẾN TRẬN: "KHAI TRẬN" Biến "MÁU" của một kẻ địch ngẫu nhiên thành 1
+
+TRIỆU TẬP TỐI CAO: "TRIỆU TẬP" một đơn vị từ CẤP 6
+
+ƯỚP XÁC: Hủy diệt một đồng minh NILES. Khi có khoảng trống trong chiến đấu. Triệu hồi đơn vị đó và biến "MÁU" thành 1 (Phép này không thể cộng dồn)
+
+-------- CẤP 4 -------------------------------------------------
+
+TRINH SÁT TÍ HON: Chọn 1 khoảng trống trên sân kẻ địch kế tiếp để "DO THÁM"
+
+GỌI ĐÒ: Nhận 1 "CHARON" vào lượt sau
+
+JORMUNGANDR NUỐT CHỬNG: "LOẠI BỎ" một đơn vị. Đưa chỉ số của nó cho một đồng minh ngẫu nhiên
+
+TÚI THẦN: Nhận 3 "TIÊN ĐAN" ngẫu nhiên
+
+LỬA HY LẠP: "KHAI TRẬN" "ĐỐT(4)" một kẻ địch ngẫu nhiên trên hàng trước
+
+MƯA TÊN: Chọn một đồng minh. "KHAI TRẬN" cho nó "TỬ VONG": Gây 2 sát thương lên toàn bộ đơn vị (cả 2 bên)
+
+BINH KHÍ HOÀNG GIA: Cho một đồng minh +4/+8 và "KHIÊU KHÍCH"
+
+ĐỘC NHẤT SA MẠC: Khi sân trống, "TRIỆU HỒI" 1 "BỌ CẠP" 1/1 với "HIỂM ĐỘC" (Không cộng dồn)
+
+LIÊN THỦ LIÊN GIỚI: Cho một đồng minh từ mỗi TỘC +4/+4
+
+THỨC THĂNG HOA: Thay thế tất cả thẻ trong "THÁNH ĐỀN" bằng thẻ cao hơn 1 CẤP
+
+GỌI NHẬP NGŨ: "TRIỆU TẬP" một đơn vị có "TRIỂN KHAI"
+
+PHÉP CHIÊU HỒN: "TRIỆU TẬP" một đơn vị có "TỬ VONG"
+
+LÍNH ĐÁNH THUÊ: Khi có khoảng trống trên sân triệu hồi "LÍNH ĐÁNH THUÊ"
+
+GIAO KÈO CỦA QUỶ: Mất 1 mạng - Nhận 6 vàng
+
+-------- CẤP 3 -------------------------------------------------
+
+KHIÊN MƯỢN: Cho một đồng minh OLYMPUS "LÁ CHẮN" cho đến lượt sau
+
+PHIẾN ĐÁ SỐ PHẬN (1 vàng): Chọn 1 đơn vị, sau đó chọn 1 đơn vị BABYLON để biến nó thành đơn vị BABYLON đó
+
+TẬN DỤNG (1 vàng): Chọn một đơn vị "LOẠI BỎ" nó và đưa "SÁT THƯƠNG" hoặc "MÁU" cho 1 đồng minh Khác
+
+HÌNH NHÂN LUYỆN TẬP (2 vàng): Khi có khoảng trống trên sân kẻ địch, triệu hồi một "HÌNH NHÂN" có 0/1 (Không cộng dồn)
+
+THAY TÂM ĐỔI TÍNH (3 vàng): Cho một đơn vị "KHIÊU KHÍCH", nếu đã có "KHIÊU KHÍCH" thì xóa nó và cho +3 "SÁT THƯƠNG"
+
+THẮP LỬA THÁNH ĐỀN (2 vàng): Các đơn vị trong "THÁNH ĐỀN" có +1/+2 trong game này
+
+NGHI LỄ TRIỆU TẬP (4 vàng): Chọn 1 đơn vị, "TRIỆU TẬP" một đơn vị khác cùng TỘC
+
+ĐẶT CƯỢC (1 vàng): Nếu bạn thắng lượt tiếp theo. Nhận 3 Vàng
+
+PHƯỚC LÀNH ĐẤT MẸ (3 vàng): Chọn 1 đơn vị, cho tất cả đơn vị cùng TỘC +2/+2
+
+TIẾNG HÉT XUNG TRẬN (2 vàng): "KHAI TRẬN" Cho tất cả đồng minh +2/+1
+
+HÀO KHÍ DÂNG TRÀO (3 vàng): Cho 1 đơn vị mỗi khi "KẾT LƯỢT" nhận +2/+1 "VĨNH VIỄN"
+
+-------- CẤP 2 -------------------------------------------------
+
+ĐỒNG DẠ ĐỒNG LÒNG (1 vàng): Cho 3 đồng minh +1/+1
+
+THẦN TÀI GÕ CỬA (2 vàng): Tăng vĩnh viễn "THU NHẬP" thêm 1
+
+Ý CHỈ THẦN THÁNH (1 vàng): Cho một đơn vị chỉ số bằng CẤP của "THÁNH ĐỀN"
+
+TUYỂN CHỌN KỸ CÀNG (2 vàng): Chọn 1 đơn vị, Nhận một đơn vị khác cùng TỘC
+
+ĐẦU TƯ KHÔN NGOAN (1 vàng): Tăng "THU NHẬP" thêm 2 cho đến lượt sau
+
+-------- CẤP 1 -------------------------------------------------
+
+THÁI CỰC TẤN (1 vàng): Cho một đơn vị +2/+2
+
+NHẬP TIỆC (1 vàng): Cho mọi đơn vị trong "THÁNH ĐỀN" hiện tại +3 "MÁU"
+
+KẺ TRỘM THÁNH ĐỀN (2 vàng): Trộm 1 đơn vị ngẫu nhiên từ "THÁNH ĐỀN" hiện tại
+
+TUYỂN QUÂN NHANH (2 vàng): Nhận 1 đơn vị CẤP 1 ngẫu nhiên
+
+GIÁP ĐÃ ĐỘN (1 vàng): Cho một đơn vị +3 "MÁU" "VĨNH VIỄN" và "KHIÊU KHÍCH"
+
+KIẾM ĐÃ MÀI (1 vàng): Cho một đơn vị +3 "SÁT THƯƠNG" "VĨNH VIỄN"
+
+ĐỒNG VÀNG CỔ (1 vàng): Nhận 1 Vàng
+
+-------- VẬT TRIỆU HỒI -----------------------------------------
+
+HÌNH NHÂN                                             [VẬT TRIỆU HỒI]
+  Chỉ số :  0/1
+  Kỹ năng:
+    lv1: "KHIÊU KHÍCH" - "KHÔNG THỂ TẤN CÔNG"
+
+
+================================================================
+VI. TIÊN ĐAN  (Tộc Shenzhou) không có giá
+================================================================
+
+-------- CẤP 6 -------------------------------------------------
+
+LÃO TỬ TIÊN ĐAN: Cho "TÔN NGỘ KHÔNG" +6/+6 "VĨNH VIỄN"; hoặc "LÁ CHẮN"; hoặc "XUYÊN KÍCH"; hoặc "TRẢM KÍCH" cho đến lượt sau
+
+NGŨ UẨN ĐAN: Cho 1 đồng minh +5/+5 "VĨNH VIỄN" và cho nó "LÁ CHẮN", "TÁI SINH", "TRẢM KÍCH", "XUYÊN KÍCH", "KHIÊU KHÍCH" đến lượt sau
+
+THĂNG HOA ĐAN: tăng gấp đôi chỉ số của 1 đơn vị cho đến lượt sau
+
+BẢO MỆNH ĐAN: Cho một đồng minh bỏ qua lần đầu tiên nhận sát thương gây "TỬ VONG" cho đến lượt sau
+
+-------- CẤP 5 -------------------------------------------------
+
+LONG LÂN ĐAN: Cho một đồng minh +5/+5 "VĨNH VIỄN" và "LÁ CHẮN" cho đến lượt sau
+
+HOÀN HỒN ĐAN: Cho một đồng minh "TÁI SINH" với toàn bộ "SÁT THƯƠNG" cho đến lượt sau
+
+-------- CẤP 4 -------------------------------------------------
+
+HỔ CUỒNG ĐAN: Tăng gấp đôi "SÁT THƯƠNG" của một đồng minh cho đến lượt sau
+
+-------- CẤP 3 -------------------------------------------------
+
+KIÊN CỐT ĐAN: Cho một đồng minh +3/+3 "VĨNH VIỄN" và "LÁ CHẮN" cho đến lượt sau
+
+-------- CẤP 2 -------------------------------------------------
+
+THÁI CỰC ĐAN: Cho một đồng minh +1/+1 "VĨNH VIỄN"
+
+-------- CẤP 1 -------------------------------------------------
+
+DIÊN THỌ ĐAN: Cho một đồng minh +1 "MÁU" "VĨNH VIỄN"
+
+BỘI LỰC ĐAN: Cho một đồng minh +1 "SÁT THƯƠNG" "VĨNH VIỄN"
+
+================================================================
