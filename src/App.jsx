@@ -58,6 +58,7 @@ const DEFAULT_GAME = {
   shopBuff: { a: 0, h: 0 }, // chỉ số cộng vào quân trong Thánh Đền (Horagi / Nhập Tiệc...)
   guard: { cd: false, enlil: false, setCost: 3, setUsed: false, dan: 0, spells: 0, nilesBuff: 0 }, // trạng thái Thần Bảo Hộ
   survivalTotal: null, survivalPlayed: 0,
+  unitSeen: {}, // đếm số lần mỗi đơn vị xuất hiện trong Thánh Đền — theo TỪNG ván, reset khi sang ván mới
 };
 const DEFAULT_OVR = { stats: {}, prices: {} };
 
@@ -107,9 +108,74 @@ const MECH_DEFS = {
     p: (t, u) => !!u.sum || /tử vong/.test(t),
     y: (t) => /((đồng minh|niles).{0,20}chết|sau khi.{0,20}chết).{0,25}(nhận|\+\d|"tái sinh")/.test(t),
   },
+  LACHAN: {
+    label: "Lá Chắn",
+    p: (t) => /(cho .{0,30}lá chắn|và "?lá chắn)/.test(t) && !/(sau khi|nhận "?lá chắn →|mất "?lá chắn)/.test(t),
+    y: (t) => /(sau khi.{0,30}lá chắn|khi .{0,20}nhận "?lá chắn|mất "?lá chắn)/.test(t),
+  },
+  DOT: {
+    label: "Đốt",
+    p: (t) => /đốt\(\d/.test(t) && !/(hiệu ứng .{0,6}đốt|đốt".{0,20}gây thêm)/.test(t),
+    y: (t) => /(hiệu ứng .{0,6}"?đốt"?|"?đốt"?.{0,15}của ngươi).{0,25}gây thêm/.test(t),
+  },
+  PHEP: {
+    label: "Phép Thánh Đền",
+    p: (t) => /(nhận|cho) .{0,18}"?phép thánh đền|thánh đền.{0,12}cho .{0,8}phép/.test(t),
+    y: (t) => /(mỗi khi|sau khi) .{0,15}sử dụng "?phép thánh đền/.test(t),
+  },
+  KETLIEU: {
+    label: "Kết Liễu",
+    p: (t) => /kích hoạt hiệu ứng "?kết liễu/.test(t), // enabler; self-finisher gán qua override
+    y: (t) => /(đồng minh.{0,15}(kết liễu|kích hoạt "?kết liễu)|kết liễu\(\d\).{0,30}(nhận|có \+|\+\d)|bị kết liễu.{0,30}(nhận|có \+|\+\d))/.test(t),
+  },
+  NHANST: {
+    label: "Chịu đòn (nhận sát thương)",
+    p: (t) => /gây \d+ "?sát thương"? lên .{0,18}đồng minh|nhận sát thương thay/.test(t),
+    y: (t) => /(khi.{0,18}nhận sát thương|đồng minh.{0,12}nhận sát thương|nhận sát thương,).{0,35}(nhận|cho|\+\d|máu)/.test(t),
+  },
+  TIENDAN: {
+    label: "Tiên Đan",
+    p: (t) => /(nhận \d+ .{0,12}(tiên đan|đan"|long lân đan|thái cực đan|diên thọ đan|bội lực đan)|cho .{0,30}(tiên đan|thái cực đan)|cho mỗi đồng minh .{0,40}tiên đan)/.test(t),
+    y: (t) => /((khi|mỗi khi|bất cứ khi nào).{0,30}nhận "?tiên đan|cho mỗi viên "?tiên đan|"?tiên đan"?.{0,14}(của ngươi )?cho thêm|tiên đan"? tăng .{0,18}cho thêm)/.test(t),
+  },
+  SHOPBUFF: {
+    label: "Buff Thánh Đền",
+    p: (t) => /(cho|các) .{0,25}đơn vị.{0,6}(trong |ở )?"?thánh đền.{0,35}(\+\d|chỉ số)/.test(t) && !/hấp thụ/.test(t),
+    y: (t) => /"?hấp thụ"? .{0,20}(\d )?đơn vị.{0,15}(trong |ở )?"?thánh đền|"?hấp thụ"? một đơn vị/.test(t),
+  },
+  HAPTHU: {
+    label: "Hấp Thụ",
+    p: (t) => /"?hấp thụ"? .{0,20}(\d )?đơn vị|đơn vị đó "?hấp thụ/.test(t),
+    y: (t) => /\d+ đơn vị được "?hấp thụ/.test(t),
+  },
+  HAND: {
+    label: "Vỗ béo Tay",
+    p: (t) => /((cho|đưa) .{0,30}(trong tay|đơn vị .{0,8}tay)|thêm vào tay, nhận|ở trong tay.{0,45}nhận \+)/.test(t),
+    y: (t) => /(triệu hồi .{0,45}(từ tay|trong tay)|chỉ số .{0,20}(một )?đơn vị .{0,10}(ngẫu nhiên )?trong tay)/.test(t),
+  },
+  TRIENKHAI: {
+    label: "Triển khai (Babylon)",
+    p: (t) => /nhận \d+ đơn vị babylon|đổi lại "?thánh đền"? bằng .{0,12}babylon/.test(t),
+    y: (t) => /(sau khi|bất cứ khi nào) (ngươi )?triển khai (một |1 )?đơn vị babylon/.test(t),
+  },
+  MUABAN: {
+    label: "Bán / Tái chế (Babylon)",
+    p: (t) => /khi (ngươi )?bán .{0,14}(đơn vị này|này")/.test(t),
+    y: (t) => /(khi|bất cứ khi nào) (ngươi )?bán (một|1) đơn vị[^.]{0,35}(nhận|hấp thụ|cho (tất cả|mọi))/.test(t),
+  },
+  GAYST: {
+    label: "Chuỗi Gây Sát Thương (Kami)",
+    p: (t) => /(khi|bất cứ khi nào) .{0,22}kami .{0,4}tấn công|"?tấn công"?[^.]{0,25}lặp lại|luôn gây .{0,10}sát thương|khi .{0,18}bị tấn công[^.]{0,20}gây \d+ sát thương/.test(t),
+    y: (t) => /(sau khi|bất cứ khi nào) (một )?đồng minh kami gây sát thương/.test(t),
+  },
+  ANTHAN: {
+    label: "Ẩn Thân (Kami)",
+    p: (t) => /(cho|nhận) [^.]{0,40}"?ẩn thân/.test(t) && !/(mất|đang|có|nếu) "?ẩn thân/.test(t),
+    y: (t) => /(mất "?ẩn thân|đang "?ẩn thân|có "?ẩn thân|nếu [^.]{0,12}"?ẩn thân)/.test(t),
+  },
 };
 const MECH_LIST = Object.keys(MECH_DEFS);
-const MECH_TAGS = new Set(["TRIEUHOI", "TAISINH"]); // tag đã có engine combo riêng → khỏi cộng phẳng
+const MECH_TAGS = new Set(["TRIEUHOI", "TAISINH", "LACHAN", "DOT", "PHEP", "KETLIEU", "NHANST", "TIENDAN", "SHOPBUFF", "HAPTHU", "TRIENKHAI", "MUABAN", "GAYST", "ANTHAN"]); // tag đã có engine combo riêng → khỏi cộng phẳng
 
 // Chỉnh tay vai trò (đã verify cho toàn bộ tộc NILES). "p"=nguồn, "y"=payoff, "py"=cả hai, "-"=xóa.
 const ROLE_OVERRIDE = {
@@ -134,6 +200,88 @@ const ROLE_OVERRIDE = {
   BABI: { TAISINH: "py" },
   // NILES – nuôi từ cái chết
   AMMIT: { CHET: "y" },
+
+  // ===== OLYMPUS =====
+  // Lá Chắn – nguồn cấp khiên → quân ăn theo khi khiên được nhận / mất
+  ARES: { LACHAN: "p" },
+  ARTEMIS: { LACHAN: "p", KETLIEU: "-" }, // KẾT LIỄU chỉ là điều kiện kích khiên, không phải engine kết liễu
+  MINOTAUR: { LACHAN: "p" },
+  "AETHER & HEMERA": { LACHAN: "p" },
+  CRINBROG: { LACHAN: "py" }, // mất khiên → regrant khiên (vừa nguồn vừa payoff)
+  ORTHROS: { LACHAN: "py" }, // khiên nội tại + tự buff khi mất khiên
+  APOLO: { LACHAN: "y", DOT: "p" }, // nhận khiên → tấn công + ĐỐT
+  ATHENA: { LACHAN: "y" },
+  // Đốt – nguồn gây ĐỐT → quân khuếch đại ĐỐT
+  TYPHON: { DOT: "p" },
+  CHIMERA: { DOT: "p" },
+  HYDRA: { DOT: "p" },
+  PROMETHEUS: { DOT: "y", TAISINH: "-", CHET: "-" }, // "TÁI SINH-TỬ VONG" chỉ là điều kiện; thực chất khuếch đại ĐỐT
+  GRAFIGI: { DOT: "y" },
+  // Phép Thánh Đền – nguồn tạo phép → quân ăn theo mỗi lần dùng phép
+  HECATE: { PHEP: "y" },
+  "HỌC GIẢ HY LẠP": { PHEP: "p" },
+  SCYLLA: { PHEP: "p", KETLIEU: "-" },
+
+  // ===== YGGDRASIL =====
+  // Kết Liễu – nguồn/kích hoạt kết liễu → quân khuếch đại theo mỗi lần kết liễu
+  SKADI: { KETLIEU: "p" }, // +sát thương & re-trigger KẾT LIỄU của đồng minh
+  THOR: { KETLIEU: "py" }, // kết liễu → sát thương thừa (tự tạo thêm kết liễu)
+  "KẺ CUỒNG NỘ": { KETLIEU: "p" },
+  VALKYRIE: { KETLIEU: "p" },
+  "HULDRA THỢ SĂN": { KETLIEU: "p" },
+  VIKING: { KETLIEU: "p" },
+  HEIMDALL: { KETLIEU: "y" }, // đồng minh KẾT LIỄU → cả đội +stat
+  BRAGI: { KETLIEU: "y" },
+  // Chịu đòn – nguồn khiến đồng minh nhận sát thương → quân lớn lên khi bị đánh
+  BALDUR: { NHANST: "p" }, // gây sát thương lên toàn bộ đồng minh → nuôi cả engine
+  "JOTUNN BĂNG": { NHANST: "py" }, // khiêu khích, khi bị đánh gây sát thương lên đồng minh liền kề
+  "TIÊN HẮC ÁM": { NHANST: "p" },
+  FRIGGA: { NHANST: "p" }, // hào quang, nhận sát thương thay đồng minh
+  TYR: { NHANST: "y" },
+  SIF: { NHANST: "y" },
+  "JOTUNN CÂY": { NHANST: "y" },
+  "HULDRA CHỮA TRỊ": { NHANST: "y" },
+  "QUỶ LÙN": { NHANST: "py" },
+
+  // Cross-tribe scoping: KẺ TÀ GIÁO (NILES) thực chất là payoff khi đồng minh CHẾT, không phải engine kết liễu
+  "KẺ TÀ GIÁO": { KETLIEU: "-", CHET: "y" },
+
+  // ===== SHENZHOU – engine Tiên Đan (nguồn tạo/rải đan → quân lớn lên khi nhận đan) =====
+  "TIỂU LONG NỮ": { TIENDAN: "y" }, // "cho mỗi viên tiên đan" = scale theo đan, không phải rải đan
+  "TÔN NGỘ KHÔNG": { TIENDAN: "y" }, // luyện đan → tự cường hóa
+  "THÂN CÔNG BÁO": { TIENDAN: "y", TAISINH: "-" }, // luyện đan → hồi sinh (payoff kinh tế đan)
+  "THỎ NGỌC": { TIENDAN: "y" }, // khuếch đại đan tăng MÁU
+  "HỖN ĐỘN": { TIENDAN: "y" }, // khuếch đại đan tăng SÁT THƯƠNG
+  "KHỈ NHỎ": { TIENDAN: "y" }, // nhận đan → lớn lên / tiến hóa
+  "LONG CÁT CÔNG CHÚA": { TIENDAN: "py" }, // nhận đan → nhân bản đan sang đồng minh
+  "HẠO THIÊN KHUYỂN": { TIENDAN: "p" }, // rải đan cho mọi đồng minh SHENZHOU
+  "KHƯƠNG TỬ NHA": { TIENDAN: "p" }, // re-trigger TRIỂN KHAI → nhân bộ tạo đan
+  "THAO THIẾT": { TIENDAN: "p", KETLIEU: "-" }, // kết liễu chỉ là điều kiện lấy đan
+
+  // ===== NEUTRAL – hỗ trợ / khuếch đại engine của tộc khác =====
+  MORTISSA: { CHET: "p", TRIEUHOI: "p" }, // TỬ VONG kích thêm lần → nhân engine chết/triệu hồi
+  QUETZ: { PHEP: "p" }, // triệu tập phép → nuôi payoff Phép Thánh Đền
+  SORELL: { PHEP: "p" },
+  SPORA: { LACHAN: "p" }, // TỬ VONG cho cả đội LÁ CHẮN → nuôi payoff Lá Chắn (Olympus)
+  "THỢ SĂN HUNG TÀN": { KETLIEU: "y" }, // payoff khi kết liễu (kinh tế vàng)
+  "HỘ VỆ THỔ DÂN": { NHANST: "py" }, // khiêu khích, bị đánh → buff đa tộc
+  AGONISTA: { TIENDAN: "p" }, // TRIỂN KHAI kích thêm → nhân bộ tạo đan
+  AVIDARA: { TIENDAN: "p" }, // KẾT LƯỢT kích thêm → nhân bộ tạo đan
+  "THỔ DÂN MAN RỢ": { LACHAN: "-" }, // skill GỠ Lá Chắn của địch, không phải cấp khiên
+
+  // ===== DAEHAN: engine "Buff Thánh Đền → Hấp Thụ" + "vỗ béo Tay → triệu hồi" =====
+  // Hầu hết được heuristic nhận đúng; chỉ SAMJOKO cần chỉnh (nó NUÔI bài trong tay, không triệu hồi từ tay)
+  SAMJOKO: { HAND: "p" },
+
+  // ===== BABYLON: engine "Triển khai liên hoàn" + "Bán/Tái chế" =====
+  GILGAMESH: { TRIENKHAI: "y" }, // "khi được tăng chỉ số → nhận thêm" = payoff của bão buff triển khai
+  HUMBABA: { KETLIEU: "-" }, // KẾT LIỄU chỉ là điều kiện lấy quân; engine thật là bơm quân triển khai
+
+  // ===== KAMI: engine "Ẩn Thân" + "Chuỗi Gây Sát Thương" =====
+  HACHIMAN: { GAYST: "py" }, // vừa xả sát thương vừa scale theo số đòn đồng minh gây ra
+  FUJIN: { GAYST: "p" }, // trao LIÊN KÍCH → nhân số đòn đánh → nhiều sự kiện gây sát thương
+  JIMENJU: { ANTHAN: "p" }, // cấp ẨN THÂN (mệnh đề "nếu đã có" làm heuristic đọc nhầm thành payoff)
+  UMIBOZU: { KETLIEU: "-" }, // KẾT LIỄU chỉ là điều kiện; engine thật là ẨN THÂN
 };
 
 const UNIT_ROLES = (() => {
@@ -191,10 +339,8 @@ function comboScore(bus) {
     } else if (Y.length) {
       const pts = Math.round(strength * 0.15);
       items.push({ pts, label: `${label}: có ${nm(Y)} nhưng THIẾU NGUỒN (điểm bị hạ mạnh)` });
-    } else if (P.length >= 2) {
-      const pts = Math.round(Math.min(supply, 4) * 1.2);
-      if (pts > 0) items.push({ pts, label: `${label}: ${P.length} nguồn nhưng chưa có quân hưởng lợi` });
     }
+    // Chỉ có nguồn mà chưa có payoff → không cộng điểm ở đây; lời khuyên nằm trong buildPlan.
   });
   return { items };
 }
@@ -901,6 +1047,32 @@ export default function App() {
   const sc = useMemo(() => scoreBoard(g.board, ovr), [g.board, ovr]);
   const plan = useMemo(() => buildPlan(g, ovr), [g, ovr]);
 
+  /* ---- Bộ đếm tộc trong ván: tộc nào xuất hiện nhiều nhất + engine đã đủ mảnh chưa ---- */
+  const tribeSeen = useMemo(() => {
+    const byTribe = {}; // tộc -> { count, ids:{id:n} }
+    Object.entries(g.unitSeen || {}).forEach(([id, n]) => {
+      const u = UNITS[+id];
+      if (!u || u.sum) return;
+      const t = u.t;
+      byTribe[t] = byTribe[t] || { count: 0, ids: {} };
+      byTribe[t].count += n;
+      byTribe[t].ids[+id] = n;
+    });
+    const list = Object.entries(byTribe).map(([t, d]) => {
+      const ids = Object.keys(d.ids).map(Number);
+      // engine đủ mảnh = cơ chế có thấy CẢ nguồn (p) LẪN payoff (y)
+      const engines = MECH_LIST.filter((m) => {
+        let p = false, y = false;
+        ids.forEach((id) => { const r = roleOf(id)[m] || ""; if (r.includes("p")) p = true; if (r.includes("y")) y = true; });
+        return p && y;
+      }).map((m) => MECH_DEFS[m].label);
+      const top = ids.map((id) => ({ id, n: d.ids[id] })).sort((a, b) => b.n - a.n).slice(0, 4);
+      return { t, count: d.count, kinds: ids.length, engines, top };
+    }).sort((a, b) => b.count - a.count || b.kinds - a.kinds);
+    const total = list.reduce((s, x) => s + x.count, 0);
+    return { list, total };
+  }, [g.unitSeen]);
+
   /* ---- vòng / ván ---- */
   const endRound = (res) => { // 'W' thắng | 'L' thua | 'D' hòa
     setLogs((L) => ({ ...L, rounds: [...L.rounds, { round: g.round, phase: g.phase, result: res, ts: Date.now() }] }));
@@ -1074,7 +1246,8 @@ export default function App() {
       setGame({ ...g, board: b }); setPicker(null);
     } else if (p.mode === "shopUnit" && kind === "u") {
       const su = [...(g.shop.units || [])]; su[p.slot] = { id: item.id };
-      setGame({ ...g, shop: { ...g.shop, units: su } });
+      const seen = { ...(g.unitSeen || {}) }; seen[item.id] = (seen[item.id] || 0) + 1;
+      setGame({ ...g, shop: { ...g.shop, units: su }, unitSeen: seen });
       setLogs((L) => ({ ...L, shop: [...L.shop, { temple: g.temple, unitId: item.id, ts: Date.now() }] }));
       setPicker(null);
     } else if (p.mode === "shopSpell" && kind === "s") {
@@ -1513,6 +1686,59 @@ export default function App() {
   const warns = positionWarnings(g.board, ovr);
   const tabToiuu = (
     <div className="p-4">
+      <Card title="Bộ đếm tộc trong ván" right={<span className="text-[10px] font-bold" style={{ ...NUM, color: COL.mut }}>{tribeSeen.total} lượt thấy</span>}>
+        {tribeSeen.total === 0 ? (
+          <div className="text-[11px] leading-relaxed" style={{ color: COL.mut }}>
+            Mỗi khi bạn nhập quân vào Thánh Đền (tab Đội hình), app đếm tộc nào xuất hiện nhiều nhất trong ván này. Dùng để linh hoạt đổi hướng: đừng cố chấp 1 tộc nếu quân liên quan không ra — theo tộc đang ngập shop và đã đủ mảnh combo.
+          </div>
+        ) : (
+          <>
+            {(() => {
+              const L = tribeSeen.list, lead = L[0], committed = g.tribes;
+              let text, color;
+              if (committed.length === 0) {
+                text = `Chưa chốt tộc. "${TRIBE_META[lead.t].l}" đang ra nhiều nhất (${lead.count} lượt${lead.engines.length ? `, đủ mảnh: ${lead.engines.join(", ")}` : " — nhưng CHƯA đủ nguồn↔payoff"}) → ưu tiên build tộc này.`;
+                color = lead.engines.length ? COL.green : COL.gold;
+              } else if (committed.includes(lead.t)) {
+                text = `✓ Tộc đang theo ("${TRIBE_META[lead.t].l}") cũng ra nhiều nhất${lead.engines.length ? ` và đã đủ mảnh (${lead.engines.join(", ")})` : ""} — giữ hướng, gom thêm.`;
+                color = COL.green;
+              } else {
+                const mine = L.filter((x) => committed.includes(x.t)).reduce((s, x) => s + x.count, 0);
+                if (lead.count >= Math.max(4, mine * 1.5) && lead.engines.length) {
+                  text = `⚠ "${TRIBE_META[lead.t].l}" đang NGẬP Thánh Đền (${lead.count} lượt, đủ mảnh: ${lead.engines.join(", ")}) trong khi tộc bạn theo chỉ ra ${mine}. Cân nhắc CHUYỂN sang "${TRIBE_META[lead.t].l}".`;
+                  color = COL.red;
+                } else {
+                  text = `"${TRIBE_META[lead.t].l}" ra nhiều nhất (${lead.count})${lead.engines.length ? "" : " nhưng chưa đủ nguồn↔payoff"} — chưa chênh đủ để bỏ tộc đang theo (${mine}). Theo dõi thêm vài lượt.`;
+                  color = COL.mut;
+                }
+              }
+              return <div className="text-[11px] font-bold leading-relaxed mb-2 p-2 rounded-lg" style={{ color, background: color + "18" }}>{text}</div>;
+            })()}
+            {tribeSeen.list.map((row) => {
+              const max = tribeSeen.list[0].count || 1;
+              const committed = g.tribes.includes(row.t);
+              const tc = TRIBE_META[row.t].c;
+              return (
+                <div key={row.t} className="py-1.5" style={{ borderBottom: `1px solid ${COL.line}` }}>
+                  <div className="flex items-center gap-2 text-[11px]" style={NUM}>
+                    <span className="w-20 font-extrabold truncate" style={{ color: tc }}>{TRIBE_META[row.t].l}{committed ? " ✓" : ""}</span>
+                    <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ background: COL.panel2 }}>
+                      <div className="h-full rounded-full" style={{ width: (100 * row.count) / max + "%", background: tc }} />
+                    </div>
+                    <span className="w-16 text-right font-extrabold" style={{ color: COL.ink }}>{row.count} · {row.kinds} loại</span>
+                  </div>
+                  <div className="text-[10px] mt-0.5 ml-[88px] leading-snug" style={{ color: row.engines.length ? COL.green : COL.mut }}>
+                    {row.engines.length ? `⚙ đủ mảnh: ${row.engines.join(", ")}` : "chưa đủ nguồn↔payoff cho combo nào"}
+                  </div>
+                </div>
+              );
+            })}
+            <button onClick={() => { setGame({ ...g, unitSeen: {} }); flash("Đã reset bộ đếm tộc của ván"); }}
+              className="mt-2 text-[10px] font-bold px-2.5 py-1.5 rounded-lg" style={{ background: COL.panel2, color: COL.mut, border: `1px solid ${COL.line}` }}>↺ Reset bộ đếm</button>
+          </>
+        )}
+      </Card>
+
       <Card title="Kế hoạch hành động (theo thứ tự ưu tiên)">
         {plan.actions.length ? plan.actions.map((a, i) => (
           <div key={i} className="flex items-start gap-2.5 py-2 text-xs leading-relaxed" style={{ borderBottom: i < plan.actions.length - 1 ? `1px solid ${COL.line}` : "none", color: COL.ink }}>
